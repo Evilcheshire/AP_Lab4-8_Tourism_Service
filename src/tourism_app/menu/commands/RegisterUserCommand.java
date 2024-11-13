@@ -1,19 +1,34 @@
 package tourism_app.menu.commands;
 
 import tourism_app.lib.UserDatabase;
+import tourism_app.users.User;
 
-public class RegisterUserCommand implements Command {
-    private final UserDatabase database;
+import java.util.Scanner;
 
-    public RegisterUserCommand(UserDatabase database) {
-        this.database = database;
+public class RegisterUserCommand implements Command, AuthCommand {
+    private final UserDatabase userDatabase;
+    private User registeredUser;
+
+    public RegisterUserCommand(UserDatabase userDatabase) {
+        this.userDatabase = userDatabase;
+    }
+
+    public User getAuthenticatedUser() {
+        return registeredUser;
     }
 
     public void execute() {
-        System.out.println("Register user command has been executed.");
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter username: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter password: ");
+        String password = scanner.nextLine();
+
+        registeredUser = userDatabase.registerUser(name, password);
+        System.out.println("Registration successful! You can now log in.");
     }
 
-    public String getName(){
+    public String getName() {
         return "Register user";
     }
 }

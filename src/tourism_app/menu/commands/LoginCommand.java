@@ -1,12 +1,11 @@
-package tourism_app.login;
+package tourism_app.menu.commands;
 
 import tourism_app.lib.UserDatabase;
-import tourism_app.menu.commands.Command;
 import tourism_app.users.User;
 
 import java.util.Scanner;
 
-public class LoginCommand implements Command {
+public class LoginCommand implements Command, AuthCommand {
     private final UserDatabase userDatabase;
     private User authenticatedUser;
 

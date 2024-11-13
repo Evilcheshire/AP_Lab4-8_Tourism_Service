@@ -1,55 +1,55 @@
 package tourism_app.menu;
 
 import tourism_app.lib.UserDatabase;
+import tourism_app.menu.commands.*;
 import tourism_app.users.User;
 
+import java.util.LinkedHashMap;
 import java.util.Scanner;
 
 public class MainMenu {
     private final UserDatabase userDatabase;
     private final Scanner scanner = new Scanner(System.in);
+    private User currentUser;
 
     public MainMenu(UserDatabase userDatabase) {
         this.userDatabase = userDatabase;
     }
 
     public void start() {
-        User currentUser = null;
+        System.out.println("Welcome to the Tourism App!");
+
+        LinkedHashMap<String, AuthCommand> initialCommands = new LinkedHashMap<>();
+        initialCommands.put("1", new RegisterUserCommand(userDatabase));
+        initialCommands.put("2", new LoginCommand(userDatabase));
+        initialCommands.put("3", new ExitCommand(userDatabase));
+
         while (currentUser == null) {
-            System.out.println("Welcome to the Tourism App!");
-            System.out.println("1. Register");
-            System.out.println("2. Login");
-            System.out.print("Choose an option: ");
-
+            System.out.println("Please choose an option:\n1. Register\n2. Log in\n3. Exit");
             String choice = scanner.nextLine();
-            currentUser = choice.equals("1") ? register() : login();
+
+            AuthCommand selectedCommand = initialCommands.get(choice);
+
+            if (selectedCommand != null) {
+                selectedCommand.execute();
+                currentUser = selectedCommand.getAuthenticatedUser();
+            } else {
+                System.out.println("Invalid option. Please try again.");
+            }
         }
 
-        new Menu(currentUser, currentUser.getUserType().getMenu(userDatabase)).executeSelectedCommand();
+        loadUserMenu();
     }
 
-    private User register() {
-        System.out.print("Enter username: ");
-        String name = scanner.nextLine();
-        System.out.print("Enter password: ");
-        String password = scanner.nextLine();
-        User newUser = userDatabase.registerUser(name, password);
-        System.out.println("Registration successful! You can now log in.");
-        return newUser;
-    }
+    private void loadUserMenu() {
+        LinkedHashMap<String, Command> userCommands = currentUser.getUserType().getMenu(userDatabase, currentUser);
+        Menu userMenu = new Menu(userDatabase, currentUser, userCommands);
 
-    private User login() {
-        System.out.print("Enter username: ");
-        String name = scanner.nextLine();
-        System.out.print("Enter password: ");
-        String password = scanner.nextLine();
-
-        User user = userDatabase.login(name, password);
-        if (user != null) {
-            System.out.println("Login successful! Welcome, " + name);
-        } else {
-            System.out.println("Login failed. Please check your username and password.");
+        while (!userMenu.isLogout()) {
+            userMenu.executeSelectedCommand();
         }
-        return user;
+
+        currentUser = null;
+        start();
     }
 }
