@@ -7,7 +7,7 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserDatabase {
+public class UserDatabase implements TourismDatabase {
     private static final String FILE_PATH = "users.ser";
     private static int nextId = 1;
     private final Map<Integer, User> usersById = new HashMap<>();
@@ -52,7 +52,7 @@ public class UserDatabase {
     }
 
     @SuppressWarnings("unchecked")
-    private void loadFromFile() {
+    public void loadFromFile() {
         File file = new File(FILE_PATH);
         if (!file.exists()) return;
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {

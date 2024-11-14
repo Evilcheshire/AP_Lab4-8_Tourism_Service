@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TourDatabase {
+public class TourDatabase implements TourismDatabase {
     private static final String FILE_PATH = "availableTours.ser";
     private final List<Tour> availableTours;
 
@@ -32,7 +32,7 @@ public class TourDatabase {
         return new ArrayList<>(availableTours);
     }
 
-    private void saveToFile() {
+    public void saveToFile() {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
             out.writeObject(availableTours);
         } catch (IOException e) {
@@ -41,7 +41,7 @@ public class TourDatabase {
     }
 
     @SuppressWarnings("unchecked")
-    private void loadFromFile() {
+    public void loadFromFile() {
         File file = new File(FILE_PATH);
         if (!file.exists()) return;
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
@@ -61,4 +61,3 @@ public class TourDatabase {
         }
     }
 }
-

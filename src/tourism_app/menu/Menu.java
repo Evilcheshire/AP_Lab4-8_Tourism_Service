@@ -1,22 +1,23 @@
 package tourism_app.menu;
 
-import tourism_app.lib.UserDatabase;
+import tourism_app.lib.*;
 import tourism_app.menu.commands.Command;
 import tourism_app.menu.commands.LogoutCommand;
 import tourism_app.users.User;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 public class Menu {
     private final User user;
-    private final UserDatabase userDatabase;
+    private final DatabaseManager dbManager;
     private final Map<String, Command> commands;
     private boolean isLogout = false;
 
-    public Menu(UserDatabase userDatabase, User user, Map<String, Command> commands) {
+    public Menu(DatabaseManager dbManager, User user, Map<String, Command> commands) {
         this.user = user;
-        this.userDatabase = userDatabase;
+        this.dbManager = dbManager;
         this.commands = commands;
     }
 

@@ -1,5 +1,6 @@
 package tourism_app.users;
 
+import tourism_app.lib.DatabaseManager;
 import tourism_app.lib.UserDatabase;
 import tourism_app.menu.MenuItems;
 import tourism_app.menu.commands.Command;
@@ -12,13 +13,13 @@ public enum UserType {
     MANAGER(MenuItems::getManagerMenu),
     CUSTOMER(MenuItems::getCustomerMenu);
 
-    private final BiFunction<UserDatabase, User, LinkedHashMap<String, Command>> menuSupplier;
+    private final BiFunction<DatabaseManager, User, LinkedHashMap<String, Command>> menuSupplier;
 
-    UserType(BiFunction<UserDatabase, User, LinkedHashMap<String, Command>> menuSupplier) {
+    UserType(BiFunction<DatabaseManager, User, LinkedHashMap<String, Command>> menuSupplier) {
         this.menuSupplier = menuSupplier;
     }
 
-    public LinkedHashMap<String, Command> getMenu(UserDatabase userDatabase, User user) {
-        return menuSupplier.apply(userDatabase, user);
+    public LinkedHashMap<String, Command> getMenu(DatabaseManager dbManager, User user) {
+        return menuSupplier.apply(dbManager, user);
     }
 }

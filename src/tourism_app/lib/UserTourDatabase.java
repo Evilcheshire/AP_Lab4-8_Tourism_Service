@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserTourDatabase {
+public class UserTourDatabase implements TourismDatabase {
     private static final String FILE_PATH = "userWithTours.ser";
     private Map<Integer, UserWithTours> userTours = new HashMap<>();
 

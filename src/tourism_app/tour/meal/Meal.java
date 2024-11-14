@@ -4,14 +4,20 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Meal  implements Serializable {
+    private String name;
     private List<String> types;
     private double costPerDay;
     private int mealsPerDay;
 
-    public Meal(List<String> types, double costPerDay, int mealsPerDay){
+    public Meal(String name, List<String> types, double costPerDay, int mealsPerDay){
+        this.name = name;
         this.types = types;
         this.costPerDay = costPerDay;
         this.mealsPerDay = mealsPerDay;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public List<String> getTypes(){
@@ -24,6 +30,10 @@ public class Meal  implements Serializable {
 
     public int getMealsPerDay() {
         return mealsPerDay;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setTypes(List<String> types){
