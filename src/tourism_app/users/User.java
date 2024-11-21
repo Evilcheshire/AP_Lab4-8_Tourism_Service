@@ -42,4 +42,9 @@ public class User implements Serializable {
     public void setPassword(String password) {
         this.passwordHash = hashPassword(password);
     }
+
+    public String toString() {
+        return String.format("User ID: %d\nName: %s\nUser Type: %s",
+                ID, name, userType);
+    }
 }

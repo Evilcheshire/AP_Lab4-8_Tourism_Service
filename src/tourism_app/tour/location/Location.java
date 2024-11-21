@@ -46,4 +46,10 @@ public class Location  implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String toString() {
+        return String.format("Location: %s\nCountry: %s\nType: %s\nDescription: %s",
+                name, country, type, description);
+    }
+
 }

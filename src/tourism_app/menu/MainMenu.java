@@ -1,11 +1,14 @@
 package tourism_app.menu;
 
-import tourism_app.lib.*;
+import tourism_app.services.lib.*;
 import tourism_app.menu.commands.*;
+import tourism_app.menu.commands.authentification.AuthCommand;
+import tourism_app.menu.commands.authentification.LoginCommand;
+import tourism_app.menu.commands.authentification.RegisterUserCommand;
 import tourism_app.users.User;
+import tourism_app.services.utils.InputValidator;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Scanner;
 
 public class MainMenu {
@@ -23,11 +26,11 @@ public class MainMenu {
         LinkedHashMap<String, AuthCommand> initialCommands = new LinkedHashMap<>();
         initialCommands.put("1", new RegisterUserCommand(dbManager.getUserDatabase()));
         initialCommands.put("2", new LoginCommand(dbManager.getUserDatabase()));
-        initialCommands.put("3", new ExitCommand(dbManager.getUserDatabase()));
+        initialCommands.put("3", new ExitCommand(dbManager));
 
         while (currentUser == null) {
             System.out.println("Please choose an option:\n1. Register\n2. Log in\n3. Exit");
-            String choice = scanner.nextLine();
+            String choice = scanner.nextLine().trim();
 
             AuthCommand selectedCommand = initialCommands.get(choice);
 
@@ -43,9 +46,12 @@ public class MainMenu {
     }
 
     private void loadUserMenu() {
-        LinkedHashMap<String, Command> userCommands = currentUser.getUserType().getMenu(
-                dbManager, currentUser);
-        Menu userMenu = new Menu(dbManager, currentUser, userCommands);
+        if (currentUser == null) return;
+
+        InputValidator inputValidator = new InputValidator(scanner);
+        LinkedHashMap<String, Command> userCommands = currentUser.getUserType().getMenu(dbManager, currentUser, inputValidator);
+
+        Menu userMenu = new Menu(dbManager, currentUser, userCommands, scanner);
 
         while (!userMenu.isLogout()) {
             userMenu.executeSelectedCommand();

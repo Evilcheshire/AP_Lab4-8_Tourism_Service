@@ -28,4 +28,17 @@ public class UserWithTours {
     public void removeTour(Tour tour) {
         this.selectedTours.remove(tour);
     }
+
+    public String toString() {
+        StringBuilder toursInfo = new StringBuilder();
+        if (selectedTours.isEmpty()) {
+            toursInfo.append("No tours selected.");
+        } else {
+            for (Tour tour : selectedTours) {
+                toursInfo.append("\n- ").append(tour.getName());
+            }
+        }
+
+        return String.format("User: %s\nSelected Tours:%s", user.getName(), toursInfo.toString());
+    }
 }

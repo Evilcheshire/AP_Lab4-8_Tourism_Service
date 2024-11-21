@@ -36,4 +36,12 @@ public class Transport implements Serializable {
     public void setCostPerDay(double costPerDay) {
         this.costPerDay = costPerDay;
     }
+
+    public String toString() {
+        return String.format("Transport: %s\nType: %s\nCost per Day: %.2f",
+                name, type, costPerDay);
+    }
+
+
+
 }

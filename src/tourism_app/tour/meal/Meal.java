@@ -68,4 +68,8 @@ public class Meal  implements Serializable {
         return mealsPerDay > 1;
     }
 
+    public String toString() {
+        return String.format("Meal: %s\nTypes: %s\nCost per Day: %.2f\nMeals per Day: %d",
+                name, String.join(", ", types), costPerDay, mealsPerDay);
+    }
 }
