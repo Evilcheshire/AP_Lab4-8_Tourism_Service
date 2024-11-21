@@ -22,7 +22,6 @@ public class Menu {
     }
 
     public void executeSelectedCommand() {
-        Scanner scanner = new Scanner(System.in);
         int attempts = 3;
 
         while (attempts > 0) {
@@ -39,9 +38,6 @@ public class Menu {
                 command.execute();
                 if ("Log out".equals(command.getName())) {
                     isLogout = true;
-                }
-                if ("Back".equals(command.getName())){
-                    return;
                 }
                 return;
             } else {

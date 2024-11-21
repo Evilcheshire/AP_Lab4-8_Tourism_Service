@@ -43,6 +43,6 @@ public class DeleteTransportCommand implements Command {
 
     @Override
     public String getName() {
-        return "Delete Transport";
+        return "Delete a transport";
     }
 }

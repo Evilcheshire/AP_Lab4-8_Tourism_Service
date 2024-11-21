@@ -30,6 +30,6 @@ public class SearchCommand implements Command {
 
     @Override
     public String getName() {
-        return "Search";
+        return "Search for data about tours";
     }
 }

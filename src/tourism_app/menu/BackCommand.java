@@ -5,9 +5,7 @@ import tourism_app.menu.commands.Command;
 public class BackCommand implements Command {
 
     @Override
-    public void execute(){
-
-    }
+    public void execute(){}
 
     @Override
     public String getName(){

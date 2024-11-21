@@ -17,16 +17,14 @@ public class CreateLocationCommand implements Command {
     public void execute() {
         System.out.println("Creating a new location:");
 
-        System.out.print("Enter the location name: ");
-        String name = inputValidator.getValidString();
+        String name = inputValidator.getValidString("Enter the location name: ");
 
         if (locationDB.getLocations().containsKey(name)) {
             System.out.println("A location with this name already exists.");
             return;
         }
 
-        System.out.print("Enter the country: ");
-        String country = inputValidator.getValidString();
+        String country = inputValidator.getValidString("Enter the country: ");
 
         System.out.println("Select the location type:");
         LocationType[] types = LocationType.values();
@@ -37,8 +35,7 @@ public class CreateLocationCommand implements Command {
         int typeIndex = inputValidator.getValidIntInRange(1, types.length);
         LocationType type = types[typeIndex - 1];
 
-        System.out.print("Enter a description of the location: ");
-        String description = inputValidator.getValidString();
+        String description = inputValidator.getValidString("Enter a description of the location: ");
 
         Location newLocation = new Location(name, country, type, description);
 
@@ -49,6 +46,6 @@ public class CreateLocationCommand implements Command {
     }
 
     public String getName() {
-        return "Create Location";
+        return "Create a new location";
     }
 }

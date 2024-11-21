@@ -5,8 +5,6 @@ import tourism_app.users.UserType;
 
 import java.io.*;
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class UserDatabase {
     private static final String FILE_PATH = "users.ser";
@@ -14,84 +12,8 @@ public class UserDatabase {
     private final Map<Integer, User> usersById = new LinkedHashMap<>();
     private final Map<String, User> usersByName = new LinkedHashMap<>();
 
-    private final Map<Integer, String> fieldOptions = Map.of(
-            1, "name",
-            2, "userType",
-            3, "ID"
-    );
-
-    private final Map<String, Predicate<User>> searchCriteria;
-
     public UserDatabase() {
         loadFromFile();
-        searchCriteria = initializeSearchCriteria();
-    }
-
-    private Map<String, Predicate<User>> initializeSearchCriteria() {
-        Map<String, Predicate<User>> criteria = new HashMap<>();
-
-        // Пошук за іменем
-        criteria.put("name", user -> {
-            String name = getUserInput("Enter user name to search: ");
-            return user.getName().equalsIgnoreCase(name);
-        });
-
-        // Пошук за типом користувача
-        criteria.put("userType", user -> {
-            String type = getUserInput("Enter user type (e.g., ADMIN, CLIENT, GUIDE): ");
-            try {
-                return user.getUserType().toString().equalsIgnoreCase(type);
-            } catch (IllegalArgumentException e) {
-                System.out.println("Invalid type entered.");
-                return false;
-            }
-        });
-
-        // Пошук за ID
-        criteria.put("ID", user -> {
-            String idInput = getUserInput("Enter user ID to search: ");
-            try {
-                int id = Integer.parseInt(idInput);
-                return user.getID() == id;
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid ID entered.");
-                return false;
-            }
-        });
-
-        return criteria;
-    }
-
-    private String getUserInput(String prompt) {
-        System.out.print(prompt);
-        Scanner scanner = new Scanner(System.in);
-        return scanner.nextLine();
-    }
-
-    public void displaySearchFields() {
-        System.out.println("Choose a field to search by:");
-        fieldOptions.forEach((key, value) -> System.out.println(key + " - " + value));
-    }
-
-    public List<User> searchUsers(int option) {
-        String field = fieldOptions.get(option);
-        if (field == null) {
-            System.out.println("Invalid option selected.");
-            return Collections.emptyList();
-        }
-
-        Predicate<User> criteria = searchCriteria.get(field);
-        List<User> result = usersById.values().stream()
-                .filter(criteria)
-                .collect(Collectors.toList());
-
-        // Відображення результатів
-        if (result.isEmpty()) {
-            System.out.println("No users found matching the criteria.");
-        } else {
-            result.forEach(user -> System.out.println("ID: " + user.getID() + ", Name: " + user.getName() + ", Type: " + user.getUserType()));
-        }
-        return result;
     }
 
     public User registerUser(String name, String password, UserType userType) {
@@ -167,7 +89,4 @@ public class UserDatabase {
         return usersById;
     }
 
-    public int getFieldOptionsSize() {
-        return fieldOptions.size();
-    }
 }

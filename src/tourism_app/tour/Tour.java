@@ -16,7 +16,7 @@ public class Tour implements Serializable {
     private Date endDate;
     private TourType type;
     private double markUp;
-    private double totalPrice;
+    private final double totalPrice;
 
     public Tour(String name, Location location, Meal meal, Transport transport, Date startDate,
                 Date endDate, TourType type, double markUp){
@@ -28,7 +28,7 @@ public class Tour implements Serializable {
         this.endDate = endDate;
         this.type = type;
         this.markUp = markUp;
-        this.totalPrice = CalculateTotalPrice();
+        this.totalPrice = this.CalculateTotalPrice();
     }
 
     public String getName() {

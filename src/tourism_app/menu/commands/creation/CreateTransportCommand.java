@@ -18,8 +18,7 @@ public class CreateTransportCommand implements Command {
     public void execute() {
         System.out.println("Creating a new transport:");
 
-        System.out.print("Enter the transport name: ");
-        String name = inputValidator.getValidString();
+        String name = inputValidator.getValidString("Enter the transport name: ");
 
         if (transportDB.getTransports().containsKey(name)) {
             System.out.println("A transport with this name already exists.");
@@ -48,6 +47,6 @@ public class CreateTransportCommand implements Command {
 
     @Override
     public String getName() {
-        return "Create Transport";
+        return "Create a new transport";
     }
 }

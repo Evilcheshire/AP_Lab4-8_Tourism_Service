@@ -31,6 +31,6 @@ public class RegisterUserCommand implements Command, AuthCommand {
     }
 
     public String getName() {
-        return "Register user";
+        return "Register";
     }
 }

@@ -1,27 +1,33 @@
 package tourism_app.menu.commands.search;
 
 import tourism_app.services.lib.LocationDatabase;
+import tourism_app.services.searchService.LocationSearchService;
 import tourism_app.menu.commands.Command;
-import tourism_app.tour.location.Location;
 import tourism_app.services.utils.InputValidator;
+import tourism_app.tour.location.Location;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SearchForLocationCommand implements Command {
     private final LocationDatabase locationDatabase;
+    private final LocationSearchService searchService;
     private final InputValidator inputValidator;
 
     public SearchForLocationCommand(LocationDatabase locationDatabase, InputValidator inputValidator) {
         this.locationDatabase = locationDatabase;
         this.inputValidator = inputValidator;
+        this.searchService = new LocationSearchService(inputValidator);
     }
 
     @Override
     public void execute() {
-        locationDatabase.displaySearchFields();
-        int choice = inputValidator.getValidIntInRange(1, locationDatabase.getFieldOptionsSize());
+        searchService.displayAvailableSearchFields();
 
-        List<Location> results = locationDatabase.searchLocations(choice);
+        int field = inputValidator.getValidIntInRange(1, searchService.getSearchFields().size());
+
+        List<Location> results = searchService.search(searchService.getSearchFields().get(field),
+                new ArrayList<>(locationDatabase.getLocations().values()));
 
         if (results.isEmpty()) {
             System.out.println("No locations found matching your criteria.");
@@ -32,8 +38,7 @@ public class SearchForLocationCommand implements Command {
     }
 
     @Override
-    public String getName(){
+    public String getName() {
         return "Search for location";
     }
 }
-

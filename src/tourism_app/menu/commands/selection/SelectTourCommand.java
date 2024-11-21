@@ -22,17 +22,14 @@ public class SelectTourCommand implements Command {
 
     @Override
     public void execute() {
-        System.out.println("Enter the name of the tour you want to select:");
-        String tourName = inputValidator.getValidString();
+        String tourName = inputValidator.getValidString("Enter the name of the tour you want to select:");
 
-        // Find tour by name (this logic assumes tour search exists in UserTourDatabase or another class)
         Tour tour = userTourDatabase.getTourByName(tourName); // Replace with actual logic to fetch the tour
         if (tour == null) {
             System.out.println("Tour not found. Please try again.");
             return;
         }
 
-        // Add the tour to the user's selected tours
         UserWithTours userWithTours = userTourDatabase.getUserTours().get(user.getID());
         if (userWithTours == null) {
             userWithTours = new UserWithTours(user, new ArrayList<>());

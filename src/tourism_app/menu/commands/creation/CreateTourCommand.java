@@ -24,16 +24,14 @@ public class CreateTourCommand implements Command {
     public void execute() {
         System.out.println("Creating a new tour...");
 
-        System.out.print("Enter tour name: ");
-        String name = inputValidator.getValidString();
+        String name = inputValidator.getValidString("Enter tour name: ");
 
         Location location = selectLocation();
 
-        System.out.println("Enter tour type (e.g., FAMILY, ADVENTURE): ");
         TourType type;
         while (true) {
             try {
-                type = TourType.valueOf(inputValidator.getValidString().toUpperCase());
+                type = TourType.valueOf(inputValidator.getValidString("Enter tour type (e.g., FAMILY, ADVENTURE): ").toUpperCase());
                 break;
             } catch (IllegalArgumentException e) {
                 System.out.println("Invalid type. Please try again.");

@@ -42,6 +42,6 @@ public class DeleteMealCommand implements Command {
     }
 
     public String getName() {
-        return "Delete Meal";
+        return "Delete a meal";
     }
 }

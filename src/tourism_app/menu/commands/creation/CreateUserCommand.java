@@ -17,8 +17,7 @@ public class CreateUserCommand implements Command {
     public void execute() {
         System.out.println("Creating a new user:");
 
-        System.out.print("Enter the username: ");
-        String name = inputValidator.getValidString();
+        String name = inputValidator.getValidString("Enter the username: ");
 
         if (userDB.getUserByName(name) != null) {
             System.out.println("A user with this name already exists.");
@@ -34,8 +33,7 @@ public class CreateUserCommand implements Command {
         int typeIndex = inputValidator.getValidIntInRange(1, userTypes.length);
         UserType selectedType = userTypes[typeIndex - 1];
 
-        System.out.print("Enter the password: ");
-        String password = inputValidator.getValidString();
+        String password = inputValidator.getValidString("Enter the password: ");
 
         User newUser = userDB.registerUser(name, password, selectedType);
 
@@ -44,6 +42,6 @@ public class CreateUserCommand implements Command {
     }
 
     public String getName() {
-        return "Create User";
+        return "Create a new user";
     }
 }

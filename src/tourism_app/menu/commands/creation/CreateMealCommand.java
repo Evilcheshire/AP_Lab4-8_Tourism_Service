@@ -20,8 +20,7 @@ public class CreateMealCommand implements Command {
     public void execute() {
         System.out.println("Creating a new meal:");
 
-        System.out.print("Enter the meal name: ");
-        String name = inputValidator.getValidString();
+        String name = inputValidator.getValidString("Enter the meal name: ");
 
         if (mealDB.getMeals().containsKey(name)) {
             System.out.println("A meal with this name already exists.");
@@ -30,8 +29,7 @@ public class CreateMealCommand implements Command {
 
         List<String> types = new ArrayList<>();
         while (true) {
-            System.out.print("Enter a type of meal (e.g., Vegetarian, Vegan, Gluten-Free): ");
-            String type = inputValidator.getValidString();
+            String type = inputValidator.getValidString("Enter a type of meal (e.g., Vegetarian, Vegan, Gluten-Free): ");
             types.add(type);
 
             System.out.print("Would you like to add another type? (y/n): ");
@@ -55,6 +53,6 @@ public class CreateMealCommand implements Command {
     }
 
     public String getName() {
-        return "Create Meal";
+        return "Create a new meal";
     }
 }

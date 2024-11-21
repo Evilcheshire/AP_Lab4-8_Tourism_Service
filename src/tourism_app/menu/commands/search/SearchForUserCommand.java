@@ -1,28 +1,33 @@
 package tourism_app.menu.commands.search;
 
 import tourism_app.services.lib.UserDatabase;
+import tourism_app.services.searchService.UserSearchService;
 import tourism_app.menu.commands.Command;
 import tourism_app.users.User;
 import tourism_app.services.utils.InputValidator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SearchForUserCommand implements Command {
     private final UserDatabase userDatabase;
+    private final UserSearchService searchService;
     private final InputValidator inputValidator;
 
     public SearchForUserCommand(UserDatabase userDatabase, InputValidator inputValidator) {
         this.userDatabase = userDatabase;
+        this.searchService = new UserSearchService(inputValidator);
         this.inputValidator = inputValidator;
     }
 
     @Override
     public void execute() {
-        userDatabase.displaySearchFields();
+        searchService.displayAvailableSearchFields();
 
-        int choice = inputValidator.getValidIntInRange(1, userDatabase.getFieldOptionsSize());
+        int field = inputValidator.getValidIntInRange(1, searchService.getSearchFields().size());
 
-        List<User> results = userDatabase.searchUsers(choice);
+        List<User> users = new ArrayList<>(userDatabase.getUsersById().values());
+        List<User> results = searchService.search(searchService.getSearchFields().get(field - 1), users);
 
         if (results.isEmpty()) {
             System.out.println("No users found matching your criteria.");

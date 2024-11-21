@@ -42,7 +42,7 @@ public class DeleteLocationCommand implements Command {
     }
 
     public String getName() {
-        return "Delete Location";
+        return "Delete a location";
     }
 
 }

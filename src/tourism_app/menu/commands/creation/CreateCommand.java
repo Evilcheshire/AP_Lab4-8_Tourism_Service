@@ -30,6 +30,6 @@ public class CreateCommand implements Command {
 
     @Override
     public String getName() {
-        return "Create";
+        return "Add new data";
     }
 }

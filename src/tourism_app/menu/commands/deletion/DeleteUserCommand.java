@@ -47,6 +47,6 @@ public class DeleteUserCommand implements Command {
 
     @Override
     public String getName() {
-        return "Delete User";
+        return "Delete a user";
     }
 }

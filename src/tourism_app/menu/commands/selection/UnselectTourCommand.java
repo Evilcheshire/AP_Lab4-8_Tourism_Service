@@ -20,17 +20,14 @@ public class UnselectTourCommand implements Command {
 
     @Override
     public void execute() {
-        System.out.println("Enter the name of the tour you want to remove:");
-        String tourName = inputValidator.getValidString();
+        String tourName = inputValidator.getValidString("Enter the name of the tour you want to remove:");
 
-        // Get user's selected tours
         UserWithTours userWithTours = userTourDatabase.getUserTours().get(user.getID());
         if (userWithTours == null || userWithTours.getSelectedTours().isEmpty()) {
             System.out.println("You have no selected tours to remove.");
             return;
         }
 
-        // Find the tour in the user's selected tours
         Tour tourToRemove = null;
         for (Tour tour : userWithTours.getSelectedTours()) {
             if (tour.getName().equalsIgnoreCase(tourName)) {

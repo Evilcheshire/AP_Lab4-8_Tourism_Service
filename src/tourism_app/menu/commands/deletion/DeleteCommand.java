@@ -30,6 +30,6 @@ public class DeleteCommand implements Command {
 
     @Override
     public String getName() {
-        return "Delete";
+        return "Delete data";
     }
 }

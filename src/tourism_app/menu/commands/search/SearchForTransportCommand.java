@@ -1,6 +1,7 @@
 package tourism_app.menu.commands.search;
 
 import tourism_app.services.lib.TransportDatabase;
+import tourism_app.services.searchService.TransportSearchService;
 import tourism_app.menu.commands.Command;
 import tourism_app.tour.transport.Transport;
 import tourism_app.services.utils.InputValidator;
@@ -9,20 +10,23 @@ import java.util.List;
 
 public class SearchForTransportCommand implements Command {
     private final TransportDatabase transportDatabase;
+    private final TransportSearchService searchService;
     private final InputValidator inputValidator;
 
     public SearchForTransportCommand(TransportDatabase transportDatabase, InputValidator inputValidator) {
         this.transportDatabase = transportDatabase;
-        this.inputValidator  = inputValidator;
+        this.searchService = new TransportSearchService(inputValidator);
+        this.inputValidator = inputValidator;
     }
 
     @Override
     public void execute() {
-        transportDatabase.displaySearchFields();
+        searchService.displayAvailableSearchFields();
 
-        int choice = inputValidator.getValidIntInRange(1, transportDatabase.getFieldOptionsSize());
+        int field = inputValidator.getValidIntInRange(1, searchService.getSearchFields().size());
 
-        List<Transport> results = transportDatabase.searchTransports(choice);
+        List<Transport> results = searchService.search(searchService.getSearchFields().get(field -1 ),
+                transportDatabase.getAllTransports());
 
         if (results.isEmpty()) {
             System.out.println("No transports found matching your criteria.");
@@ -34,6 +38,6 @@ public class SearchForTransportCommand implements Command {
 
     @Override
     public String getName() {
-    return "Search for transport";
-}
+        return "Search for transport";
+    }
 }

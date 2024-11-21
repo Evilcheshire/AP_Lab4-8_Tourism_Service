@@ -41,6 +41,6 @@ public class DeleteTourCommand implements Command {
     }
 
     public String getName() {
-        return "Delete tour";
+        return "Delete a tour";
     }
 }
