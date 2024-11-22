@@ -1,6 +1,9 @@
 package tourism_app.users;
 
+import java.beans.Customizer;
 import java.io.Serializable;
+
+import static tourism_app.users.UserType.*;
 
 public class User implements Serializable {
     private final int ID;
@@ -46,5 +49,17 @@ public class User implements Serializable {
     public String toString() {
         return String.format("User ID: %d\nName: %s\nUser Type: %s",
                 ID, name, userType);
+    }
+
+    public boolean isCustomer(){
+        return userType == CUSTOMER;
+    }
+
+    public boolean isManager(){
+        return userType == MANAGER;
+    }
+
+    public boolean isAdmin(){
+        return userType == ADMIN;
     }
 }

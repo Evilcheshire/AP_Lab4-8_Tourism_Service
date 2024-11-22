@@ -12,6 +12,10 @@ public class UserTourDatabase {
     private static final String FILE_PATH = "userWithTours.ser";
     private Map<Integer, UserWithTours> userTours = new LinkedHashMap<>();
 
+    public UserTourDatabase() {
+        loadFromFile();
+    }
+
     public void addUserWithTours(UserWithTours userWithTours) {
         userTours.put(userWithTours.getUser().getID(), userWithTours);
         saveToFile();
@@ -35,6 +39,14 @@ public class UserTourDatabase {
                 .orElse(null);
     }
 
+    public boolean removeToursForUser(int userId) {
+        if (userTours.containsKey(userId)) {
+            userTours.remove(userId);
+            saveToFile(); // Save changes to the file
+            return true;
+        }
+        return false;
+    }
 
     public void saveToFile() {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {

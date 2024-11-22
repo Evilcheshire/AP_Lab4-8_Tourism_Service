@@ -96,8 +96,4 @@ public class InputValidator {
             }
         }
     }
-
-    public Scanner getScanner() {
-        return sc;
-    }
 }

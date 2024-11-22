@@ -1,7 +1,7 @@
 package tourism_app.main;
 
 import tourism_app.services.lib.*;
-import tourism_app.menu.MainMenu;
+import tourism_app.control.menu.MainMenu;
 
 public class Main {
     public static void main(String[] args) {

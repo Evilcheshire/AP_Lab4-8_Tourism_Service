@@ -18,10 +18,13 @@ public class TourDatabase {
         saveToFile();
     }
 
-    public boolean removeTour(String tourName) {
+    public boolean removeTour(String tourName, Runnable onTourRemoved) {
         boolean removed = tours.removeIf(tour -> tour.getName().equals(tourName));
         if (removed) {
             saveToFile();
+            if (onTourRemoved != null) {
+                onTourRemoved.run();
+            }
         }
         return removed;
     }
