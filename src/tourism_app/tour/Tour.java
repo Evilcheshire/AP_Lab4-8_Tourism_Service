@@ -104,7 +104,7 @@ public class Tour implements Serializable {
     }
 
     public double CalculateTotalPrice(){
-        return (meal.getCostPerDay() + transport.getCostPerDay()) * getDuration() +
+        return (meal.getCostPerDay()) * getDuration() + transport.getCost() +
                 markUp + type.BASE_PRICE;
     }
 

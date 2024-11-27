@@ -38,20 +38,20 @@ public enum UserType {
             )
     );
 
-    private final String name;
+    private final String NAME;
     private final TriFunction<DatabaseManager, User, InputValidator, LinkedHashMap<Integer, Command>> mainMenuSupplier;
     private final Map<MenuType, TriFunction<DatabaseManager, User, InputValidator, LinkedHashMap<Integer, Command>>> menuSuppliers;
 
     UserType(String name,
              TriFunction<DatabaseManager, User, InputValidator, LinkedHashMap<Integer, Command>> mainMenuSupplier,
              Map<MenuType, TriFunction<DatabaseManager, User, InputValidator, LinkedHashMap<Integer, Command>>> menuSuppliers) {
-        this.name = name;
+        this.NAME = name;
         this.mainMenuSupplier = mainMenuSupplier;
         this.menuSuppliers = new EnumMap<>(menuSuppliers);
     }
 
     public String getName() {
-        return name;
+        return NAME;
     }
 
     public LinkedHashMap<Integer, Command> getMenu(DatabaseManager dbManager, User user, InputValidator inputValidator) {

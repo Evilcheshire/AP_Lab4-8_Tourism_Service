@@ -27,7 +27,7 @@ public class CreateUserCommand implements Command {
         System.out.println("Select the user type:");
         UserType[] userTypes = UserType.values();
         for (int i = 0; i < userTypes.length; i++) {
-            System.out.println((i + 1) + ". " + userTypes[i].NAME);
+            System.out.println((i + 1) + ". " + userTypes[i].getName());
         }
         System.out.print("Enter the number of the user type: ");
         int typeIndex = inputValidator.getValidIntInRange(1, userTypes.length);

@@ -129,9 +129,9 @@ public class MenuItems {
     public static LinkedHashMap<Integer, Command> getAdminDeleteMenu(DatabaseManager dbManager, User user, InputValidator inputValidator) {
         LinkedHashMap<Integer, Command> deleteAdminCommands = new LinkedHashMap<>();
         deleteAdminCommands.put(1, new DeleteTourCommand(dbManager, inputValidator));
-        deleteAdminCommands.put(2, new DeleteLocationCommand(dbManager.getLocationDatabase(), inputValidator));
-        deleteAdminCommands.put(3, new DeleteTransportCommand(dbManager.getTransportDatabase(), inputValidator));
-        deleteAdminCommands.put(4, new DeleteMealCommand(dbManager.getMealDatabase(), inputValidator));
+        deleteAdminCommands.put(2, new DeleteLocationCommand(dbManager, inputValidator));
+        deleteAdminCommands.put(3, new DeleteTransportCommand(dbManager, inputValidator));
+        deleteAdminCommands.put(4, new DeleteMealCommand(dbManager, inputValidator));
         deleteAdminCommands.put(5, new DeleteUserCommand(dbManager, inputValidator));
         deleteAdminCommands.put(6, new LogoutCommand(dbManager.getUserDatabase()));
         deleteAdminCommands.put(7, new BackCommand());
@@ -142,9 +142,9 @@ public class MenuItems {
     public static LinkedHashMap<Integer, Command> getManagerDeleteMenu(DatabaseManager dbManager, User user, InputValidator inputValidator) {
         LinkedHashMap<Integer, Command> deleteManagerCommands = new LinkedHashMap<>();
         deleteManagerCommands.put(1, new DeleteTourCommand(dbManager, inputValidator));
-        deleteManagerCommands.put(2, new DeleteLocationCommand(dbManager.getLocationDatabase(), inputValidator));
-        deleteManagerCommands.put(3, new DeleteTransportCommand(dbManager.getTransportDatabase(), inputValidator));
-        deleteManagerCommands.put(4, new DeleteMealCommand(dbManager.getMealDatabase(), inputValidator));
+        deleteManagerCommands.put(2, new DeleteLocationCommand(dbManager, inputValidator));
+        deleteManagerCommands.put(3, new DeleteTransportCommand(dbManager, inputValidator));
+        deleteManagerCommands.put(4, new DeleteMealCommand(dbManager, inputValidator));
         deleteManagerCommands.put(5, new LogoutCommand(dbManager.getUserDatabase()));
         deleteManagerCommands.put(6, new BackCommand());
         deleteManagerCommands.put(0, new ExitCommand(dbManager));

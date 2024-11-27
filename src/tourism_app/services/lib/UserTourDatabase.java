@@ -42,10 +42,26 @@ public class UserTourDatabase {
     public boolean removeToursForUser(int userId) {
         if (userTours.containsKey(userId)) {
             userTours.remove(userId);
-            saveToFile(); // Save changes to the file
+            saveToFile();
             return true;
         }
         return false;
+    }
+
+    public void removeTourFromUsers(String tourName) {
+        boolean removed = false;
+        for (UserWithTours userWithTours : userTours.values()) {
+            if (userWithTours.getSelectedTours().removeIf(tour -> tour.getName().equalsIgnoreCase(tourName))) {
+                removed = true;
+            }
+        }
+
+        if (removed) {
+            System.out.println("Tour \"" + tourName + "\" removed from all users' selections.");
+            saveToFile();
+        } else {
+            System.out.println("Tour \"" + tourName + "\" not found in any user's selections.");
+        }
     }
 
     public void saveToFile() {

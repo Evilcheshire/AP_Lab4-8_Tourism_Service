@@ -5,12 +5,12 @@ import java.io.Serializable;
 public class Transport implements Serializable {
     private String name;
     private TransportType type;
-    private double costPerDay;
+    private double cost;
 
-    public Transport(String name, TransportType type, double costPerDay){
+    public Transport(String name, TransportType type, double cost){
         this.name = name;
         this.type = type;
-        this.costPerDay = costPerDay;
+        this.cost = cost;
     }
 
     public String getName() {
@@ -21,8 +21,8 @@ public class Transport implements Serializable {
         return type;
     }
 
-    public double getCostPerDay() {
-        return costPerDay;
+    public double getCost() {
+        return cost;
     }
 
     public void setName(String name) {
@@ -33,13 +33,13 @@ public class Transport implements Serializable {
         this.type = type;
     }
 
-    public void setCostPerDay(double costPerDay) {
-        this.costPerDay = costPerDay;
+    public void setCost(double cost) {
+        this.cost = cost;
     }
 
     public String toString() {
-        return String.format("Transport: %s\nType: %s\nCost per Day: %.2f",
-                name, type, costPerDay);
+        return String.format("%s\nType: %s\nCost per Day: %.2f",
+                name, type, cost);
     }
 
 

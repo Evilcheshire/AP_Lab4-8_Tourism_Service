@@ -17,6 +17,10 @@ public class UserDatabase {
     }
 
     public User registerUser(String name, String password, UserType userType) {
+        if (usersByName.containsKey(name)) {
+            return null;
+        }
+
         User newUser = new User(nextId++, userType, name, password);
         usersById.put(newUser.getID(), newUser);
         usersByName.put(name, newUser);
@@ -32,8 +36,8 @@ public class UserDatabase {
         return null;
     }
 
-    public boolean removeUser(String name) {
-        User user = usersByName.remove(name);
+    public boolean removeUser(int ID) {
+        User user = usersById.remove(ID);
         if (user != null) {
             usersById.remove(user.getID());
             saveToFile();

@@ -14,11 +14,12 @@ public class TourSearchService extends SearchService<Tour> {
     }
 
     private void initializeSearchCriteria() {
-        addSearchCriterion("name", this::searchByName);
-        addSearchCriterion("location", this::searchByLocation);
-        addSearchCriterion("type", this::searchByType);
-        addSearchCriterion("start date", this::searchByStartDate);
-        addSearchCriterion("price", this::searchByPrice);
+        addSearchCriterion("Name", this::searchByName);
+        addSearchCriterion("Location", this::searchByLocation);
+        addSearchCriterion("Type", this::searchByType);
+        addSearchCriterion("Date Range", this::searchByDateRange);
+        addSearchCriterion("Price", this::searchByPrice);
+        addSearchCriterion("Meal Type", this::searchByMealType);
     }
 
     private boolean searchByName(Tour tour) {
@@ -32,23 +33,25 @@ public class TourSearchService extends SearchService<Tour> {
     }
 
     private boolean searchByType(Tour tour) {
-        String type = inputValidator.getValidString("Enter the tour type (e.g., Rest, Excursion): ");
-        try {
-            TourType tourType = TourType.valueOf(type.toUpperCase());
-            return tour.getType() == tourType;
-        } catch (IllegalArgumentException e) {
-            System.out.println("Invalid tour type entered.");
-            return false;
+        System.out.println("Available tour types:");
+        TourType[] types = TourType.values();
+        for (int i = 0; i < types.length; i++) {
+            System.out.printf("%d. %s (%s)%n", i + 1, types[i].NAME, types[i].name());
         }
+        System.out.println("Choose the number corresponding to the tour type: ");
+        int choice = inputValidator.getValidIntInRange(1, types.length);
+        TourType selectedType = types[choice - 1];
+        return tour.getType() == selectedType;
     }
 
-    private boolean searchByStartDate(Tour tour) {
-        Date minDate = inputValidator.getValidDate("yyyy-MM-dd");
-        Date maxDate = inputValidator.getValidDate("yyyy-MM-dd");
+    private boolean searchByDateRange(Tour tour) {
+        Date minDate = inputValidator.getValidDate("Enter the start date (yyyy-MM-dd): ");
+        Date maxDate = inputValidator.getValidDate("Enter the end date (yyyy-MM-dd): ");
 
-        if (maxDate.before(minDate)) {
+        while (maxDate.before(minDate)) {
             System.out.println("End date cannot be earlier than start date. Please try again.");
-            return searchByStartDate(tour);
+            minDate = inputValidator.getValidDate("Enter the start date (yyyy-MM-dd): ");
+            maxDate = inputValidator.getValidDate("Enter the end date (yyyy-MM-dd): ");
         }
         return tour.getStartDate().compareTo(minDate) >= 0 && tour.getStartDate().compareTo(maxDate) <= 0;
     }
@@ -62,5 +65,10 @@ public class TourSearchService extends SearchService<Tour> {
             return searchByPrice(tour);
         }
         return tour.getTotalPrice() >= minPrice && tour.getTotalPrice() <= maxPrice;
+    }
+
+    private boolean searchByMealType(Tour tour) {
+        String type = inputValidator.getValidString("Enter meal type (e.g., VEGETARIAN, NON_VEGETARIAN, VEGAN): ");
+        return tour.getMeal().getTypes().stream().anyMatch(t -> t.equalsIgnoreCase(type));
     }
 }

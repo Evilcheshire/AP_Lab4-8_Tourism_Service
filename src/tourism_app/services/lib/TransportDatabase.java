@@ -31,7 +31,7 @@ public class TransportDatabase {
             System.out.println("No transports available.");
         } else {
             transports.values().forEach(transport ->
-                    System.out.println("Transport: " + transport.getName() + ", Cost per day: " + transport.getCostPerDay()));
+                    System.out.println("Transport: " + transport.getName() + ", Cost per day: " + transport.getCost()));
         }
     }
 

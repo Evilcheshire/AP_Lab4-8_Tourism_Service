@@ -24,8 +24,8 @@ public class MainMenu {
         System.out.println("Welcome to the Tourism App!");
 
         Map<Integer, Command> initialCommands = new LinkedHashMap<>();
-        initialCommands.put(1, new RegisterUserCommand(dbManager.getUserDatabase()));
-        initialCommands.put(2, new LoginCommand(dbManager.getUserDatabase()));
+        initialCommands.put(1, new RegisterUserCommand(dbManager.getUserDatabase(), inputValidator));
+        initialCommands.put(2, new LoginCommand(dbManager.getUserDatabase(), inputValidator));
         initialCommands.put(3, new ExitCommand(dbManager));
 
         while (currentUser == null) {
@@ -37,6 +37,7 @@ public class MainMenu {
 
             if (selectedCommand != null) {
                 selectedCommand.execute();
+                currentUser = selectedCommand.getAuthUser();
             } else {
                 System.out.println("Invalid choice. Please try again.");
             }

@@ -5,15 +5,25 @@ import tourism_app.control.commands.Command;
 import tourism_app.tour.location.*;
 import tourism_app.services.utils.InputValidator;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class CreateLocationCommand implements Command {
     private final LocationDatabase locationDB;
     private final InputValidator inputValidator;
+    private final List<LocationType> allowedTypes;
 
     public CreateLocationCommand(LocationDatabase locationDB, InputValidator inputValidator) {
-        this.locationDB = locationDB;
-        this.inputValidator = inputValidator;
+        this(locationDB, inputValidator, Arrays.asList(LocationType.values()));
     }
 
+    public CreateLocationCommand(LocationDatabase locationDB, InputValidator inputValidator, List<LocationType> allowedTypes) {
+        this.locationDB = locationDB;
+        this.inputValidator = inputValidator;
+        this.allowedTypes = allowedTypes;
+    }
+
+    @Override
     public void execute() {
         System.out.println("Creating a new location:");
 
@@ -27,13 +37,11 @@ public class CreateLocationCommand implements Command {
         String country = inputValidator.getValidString("Enter the country: ");
 
         System.out.println("Select the location type:");
-        LocationType[] types = LocationType.values();
-        for (int i = 0; i < types.length; i++) {
-            System.out.println((i + 1) + ". " + types[i].NAME);
+        for (int i = 0; i < allowedTypes.size(); i++) {
+            System.out.println((i + 1) + ". " + allowedTypes.get(i).NAME);
         }
-        System.out.print("Enter the number of the type: ");
-        int typeIndex = inputValidator.getValidIntInRange(1, types.length);
-        LocationType type = types[typeIndex - 1];
+        int typeIndex = inputValidator.getValidIntInRange(1, allowedTypes.size());
+        LocationType type = allowedTypes.get(typeIndex - 1);
 
         String description = inputValidator.getValidString("Enter a description of the location: ");
 
@@ -45,6 +53,7 @@ public class CreateLocationCommand implements Command {
         System.out.println(newLocation);
     }
 
+    @Override
     public String getName() {
         return "Create a new location";
     }

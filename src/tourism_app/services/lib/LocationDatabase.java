@@ -1,9 +1,11 @@
 package tourism_app.services.lib;
 
 import tourism_app.tour.location.Location;
+import tourism_app.tour.location.LocationType;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class LocationDatabase {
     private static final String FILE_PATH = "locations.ser";
@@ -33,10 +35,16 @@ public class LocationDatabase {
         }
 
         int index = 1;
-        for (String locationName : locations.keySet()) {
-            System.out.println(index + ". " + locationName);
+        for (Location location : locations.values()) {
+            System.out.println(index + ". " + location.toString());
             index++;
         }
+    }
+
+    public List<Location> getFilteredLocations(List<LocationType> allowedTypes) {
+        return locations.values().stream()
+                .filter(location -> allowedTypes.contains(location.getType()))
+                .collect(Collectors.toList());
     }
 
     public boolean removeLocation(String locationName) {

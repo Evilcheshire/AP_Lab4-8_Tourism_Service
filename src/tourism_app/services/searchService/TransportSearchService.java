@@ -36,6 +36,6 @@ public class TransportSearchService extends SearchService<Transport> {
 
     private boolean searchByCostPerDay(Transport transport) {
         double maxCost = inputValidator.getValidPositiveDouble();
-        return transport.getCostPerDay() <= maxCost;
+        return transport.getCost() <= maxCost;
     }
 }

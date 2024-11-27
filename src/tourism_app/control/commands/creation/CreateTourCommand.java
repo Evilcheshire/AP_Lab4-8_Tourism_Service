@@ -5,11 +5,13 @@ import tourism_app.control.commands.Command;
 import tourism_app.tour.Tour;
 import tourism_app.tour.TourType;
 import tourism_app.tour.location.Location;
+import tourism_app.tour.location.LocationType;
 import tourism_app.tour.meal.Meal;
 import tourism_app.tour.transport.Transport;
 import tourism_app.services.utils.InputValidator;
 
 import java.util.Date;
+import java.util.List;
 
 public class CreateTourCommand implements Command {
     private final DatabaseManager dbManager;
@@ -29,17 +31,15 @@ public class CreateTourCommand implements Command {
         Location location = selectLocation();
 
         TourType type;
-        while (true) {
-            try {
-                type = TourType.valueOf(inputValidator.getValidString("Enter tour type (e.g., FAMILY, ADVENTURE): ").toUpperCase());
-                break;
-            } catch (IllegalArgumentException e) {
-                System.out.println("Invalid type. Please try again.");
-            }
-        }
+        TourType[] types = TourType.values();
 
-        System.out.print("Enter tour price: ");
-        double price = inputValidator.getValidPositiveDouble();
+        System.out.println("Choose a tour type:");
+        for (int i = 0; i < types.length; i++) {
+            System.out.println((i + 1) + ". " + types[i].NAME + " (Base Price: " + types[i].BASE_PRICE + ")");
+        }
+        int choice = inputValidator.getValidIntInRange(1, types.length);
+
+        type = types[choice - 1];
 
         Date startDate = inputValidator.getValidDate("yyyy-MM-dd");
 
@@ -67,19 +67,34 @@ public class CreateTourCommand implements Command {
     }
 
     private Location selectLocation() {
+        System.out.println("Choose a tour type to determine location type:");
+
+        // Вибір типу туру
+        TourType[] types = TourType.values();
+        for (int i = 0; i < types.length; i++) {
+            System.out.println((i + 1) + ". " + types[i].NAME);
+        }
+        int typeChoice = inputValidator.getValidIntInRange(1, types.length);
+        TourType selectedTourType = types[typeChoice - 1];
+
+        List<LocationType> allowedLocationTypes = selectedTourType.getAllowedLocationTypes();
+
+        // Вибір локації
         System.out.println("Choose a location:");
-        dbManager.getLocationDatabase().listAllLocations();
+        List<Location> filteredLocations = dbManager.getLocationDatabase().getFilteredLocations(allowedLocationTypes);
+        for (int i = 0; i < filteredLocations.size(); i++) {
+            System.out.println((i + 1) + ". " + filteredLocations.get(i).toString());
+        }
         System.out.println("0 - Create a new location");
 
-        int locationChoice = inputValidator.getValidIntInRange(0,
-                dbManager.getLocationDatabase().getLocations().size());
+        int locationChoice = inputValidator.getValidIntInRange(0, filteredLocations.size());
 
         if (locationChoice == 0) {
-            new CreateLocationCommand(dbManager.getLocationDatabase(), inputValidator).execute();
-            return dbManager.getLocationDatabase().getLocations().get
-                    (dbManager.getLocationDatabase().getLocations().size() - 1);
+            new CreateLocationCommand(dbManager.getLocationDatabase(), inputValidator, allowedLocationTypes).execute();
+            return dbManager.getLocationDatabase().getLocations()
+                    .get(dbManager.getLocationDatabase().getLocations().size() - 1);
         } else {
-            return (Location) dbManager.getLocationDatabase().getLocations().values().toArray()[locationChoice - 1];
+            return filteredLocations.get(locationChoice - 1);
         }
     }
 

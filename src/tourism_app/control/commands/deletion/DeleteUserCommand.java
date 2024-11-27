@@ -46,7 +46,7 @@ public class DeleteUserCommand implements Command {
             }
         }
 
-        if (dbManager.getUserDatabase().removeUser(userToDelete.getName())) {
+        if (dbManager.getUserDatabase().removeUser(userToDelete.getID())) {
             System.out.println("User \"" + userToDelete.getName() + "\" has been deleted.");
         } else {
             System.out.println("Failed to delete user \"" + userToDelete.getName() + "\".");
