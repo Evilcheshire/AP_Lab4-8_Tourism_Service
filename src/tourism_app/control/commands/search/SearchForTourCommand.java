@@ -11,22 +11,16 @@ import java.util.List;
 public class SearchForTourCommand implements Command {
     private final TourDatabase tourDatabase;
     private final TourSearchService searchService;
-    private final InputValidator inputValidator;
 
     public SearchForTourCommand(TourDatabase tourDatabase, InputValidator inputValidator) {
         this.tourDatabase = tourDatabase;
         this.searchService = new TourSearchService(inputValidator);
-        this.inputValidator = inputValidator;
     }
 
     @Override
     public void execute() {
-        searchService.displayAvailableSearchFields();
-
-        int field = inputValidator.getValidIntInRange(1, searchService.getSearchFields().size());
-
         List<Tour> tours = tourDatabase.getTours();
-        List<Tour> results = searchService.search(searchService.getSearchFields().get(field - 1), tours);
+        List<Tour> results = searchService.search(tours);
 
         if (results.isEmpty()) {
             System.out.println("No tours found matching your criteria.");

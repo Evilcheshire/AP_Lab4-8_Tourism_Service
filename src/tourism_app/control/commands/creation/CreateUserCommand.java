@@ -14,6 +14,7 @@ public class CreateUserCommand implements Command {
         this.inputValidator = inputValidator;
     }
 
+    @Override
     public void execute() {
         System.out.println("Creating a new user:");
 
@@ -29,8 +30,8 @@ public class CreateUserCommand implements Command {
         for (int i = 0; i < userTypes.length; i++) {
             System.out.println((i + 1) + ". " + userTypes[i].getName());
         }
-        System.out.print("Enter the number of the user type: ");
-        int typeIndex = inputValidator.getValidIntInRange(1, userTypes.length);
+
+        int typeIndex = inputValidator.getValidIntInRange("Enter the number of the user type: ",1, userTypes.length);
         UserType selectedType = userTypes[typeIndex - 1];
 
         String password = inputValidator.getValidString("Enter the password: ");
@@ -41,6 +42,7 @@ public class CreateUserCommand implements Command {
         System.out.println(newUser);
     }
 
+    @Override
     public String getName() {
         return "Create a new user";
     }

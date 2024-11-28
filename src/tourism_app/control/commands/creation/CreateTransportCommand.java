@@ -30,12 +30,11 @@ public class CreateTransportCommand implements Command {
         for (int i = 0; i < types.length; i++) {
             System.out.println((i + 1) + ". " + types[i].NAME);
         }
-        System.out.print("Enter the number of the type: ");
-        int typeIndex = inputValidator.getValidIntInRange(1, types.length);
+
+        int typeIndex = inputValidator.getValidIntInRange("Enter the number of the type: ",1, types.length);
         TransportType type = types[typeIndex - 1];
 
-        System.out.print("Enter the cost per day: ");
-        double costPerDay = inputValidator.getValidPositiveDouble();
+        double costPerDay = inputValidator.getValidPositiveDouble("Enter the cost per day: ");
 
         Transport newTransport = new Transport(name, type, costPerDay);
 

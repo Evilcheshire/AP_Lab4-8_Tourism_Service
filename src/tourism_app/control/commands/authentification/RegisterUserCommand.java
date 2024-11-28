@@ -18,9 +18,10 @@ public class RegisterUserCommand implements Command{
         this.inputValidator = inputValidator;
     }
 
+    @Override
     public void execute() {
-        String username =inputValidator.getValidString("Enter username: \n\t->");
-        String password =  inputValidator.getValidString("Enter password: \n\t->");
+        String username =inputValidator.getValidString("Enter username:");
+        String password =  inputValidator.getValidString("Enter password:");
 
 
         registeredUser = userDatabase.registerUser(username, password, UserType.CUSTOMER);

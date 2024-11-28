@@ -39,11 +39,9 @@ public class CreateMealCommand implements Command {
             }
         }
 
-        System.out.print("Enter the cost per day: ");
-        double costPerDay = inputValidator.getValidPositiveDouble();
+        double costPerDay = inputValidator.getValidPositiveDouble("Enter the cost per day: ");
 
-        System.out.print("Enter the number of meals per day (max - 6): ");
-        int mealsPerDay = inputValidator.getValidIntInRange(1, 6);
+        int mealsPerDay = inputValidator.getValidIntInRange("Enter the number of meals per day (max - 6): ",1, 6);
 
         Meal newMeal = new Meal(name, types, costPerDay, mealsPerDay);
         mealDB.addMeal(newMeal);
@@ -52,6 +50,7 @@ public class CreateMealCommand implements Command {
         System.out.println(newMeal);
     }
 
+    @Override
     public String getName() {
         return "Create a new meal";
     }

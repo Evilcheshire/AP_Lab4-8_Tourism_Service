@@ -30,17 +30,14 @@ public class DeleteMealCommand implements Command {
         System.out.println("Available meals to delete:");
         databaseManager.getMealDatabase().listAllMeals();
 
-        System.out.println("Enter the number of the meal to delete:");
-        int choice = inputValidator.getValidIntInRange(1, meals.size());
+        int choice = inputValidator.getValidIntInRange("Enter the number of the meal to delete:",1, meals.size());
 
         String selectedMealName = (String) meals.keySet().toArray()[choice - 1];
         Meal selectedMeal = meals.get(selectedMealName);
 
-        // Видалення страви
         if (databaseManager.getMealDatabase().removeMeal(selectedMealName)) {
             System.out.println("Meal \"" + selectedMeal.getName() + "\" has been deleted.");
 
-            // Видалення турів, які залежали від страви
             databaseManager.getTourDatabase().getTours().stream()
                     .filter(tour -> selectedMeal.equals(tour.getMeal()))
                     .collect(Collectors.toList())

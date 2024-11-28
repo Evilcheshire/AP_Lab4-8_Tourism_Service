@@ -30,17 +30,14 @@ public class DeleteTransportCommand implements Command {
         System.out.println("Available transports to delete:");
         databaseManager.getTransportDatabase().listAllTransports();
 
-        System.out.println("Enter the number of the transport to delete:");
-        int choice = inputValidator.getValidIntInRange(1, transports.size());
+        int choice = inputValidator.getValidIntInRange("Enter the number of the transport to delete:",1, transports.size());
 
         String selectedTransportName = (String) transports.keySet().toArray()[choice - 1];
         Transport selectedTransport = transports.get(selectedTransportName);
 
-        // Видалення транспорту
         if (databaseManager.getTransportDatabase().removeTransport(selectedTransportName)) {
             System.out.println("Transport \"" + selectedTransport.getName() + "\" has been deleted.");
 
-            // Видалення турів, які залежали від транспорту
             databaseManager.getTourDatabase().getTours().stream()
                     .filter(tour -> selectedTransport.equals(tour.getTransport()))
                     .collect(Collectors.toList())

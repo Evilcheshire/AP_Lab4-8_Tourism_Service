@@ -10,10 +10,13 @@ public class ViewAllUsersCommand implements Command {
         this.userDB = userDB;
     }
 
+    @Override
     public void execute() {
         System.out.println("Registered users:");
         userDB.listAllUsers();
     }
+
+    @Override
     public String getName(){
         return "View users";
     }

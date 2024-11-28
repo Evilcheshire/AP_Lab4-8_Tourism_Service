@@ -1,5 +1,6 @@
 package tourism_app.services.lib;
 
+import tourism_app.tour.location.Location;
 import tourism_app.tour.meal.Meal;
 
 import java.io.*;
@@ -18,19 +19,24 @@ public class MealDatabase {
         saveToFile();
     }
 
-    public Meal getMeal(String name) {
-        return meals.get(name);
-    }
-
     public Map<String, Meal> getMeals() {
         return meals;
+    }
+
+    public List<Meal> getMealsAsList() {
+        return new ArrayList<>(meals.values());
     }
 
     public void listAllMeals() {
         if (meals.isEmpty()) {
             System.out.println("No meals available.");
-        } else {
-            meals.values().forEach(System.out::println);
+            return;
+        }
+
+        int index = 1;
+        for (Meal meal : meals.values()) {
+            System.out.println(index + ". " + meal.toString());
+            index++;
         }
     }
 
@@ -43,7 +49,7 @@ public class MealDatabase {
     }
 
     public void saveToFile() {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_PATH,false))) {
             out.writeObject(meals);
         } catch (IOException e) {
             System.out.println("Error saving meals: " + e.getMessage());

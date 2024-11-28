@@ -3,7 +3,6 @@ package tourism_app.services.utils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Scanner;
 
 public class InputValidator {
@@ -13,9 +12,10 @@ public class InputValidator {
         this.sc = sc;
     }
 
-    public int getValidIntInRange(int min, int max) {
+    public int getValidIntInRange(String prompt, int min, int max) {
+        System.out.println(prompt);
         while (true) {
-            System.out.print("Enter a number between " + min + " and " + max + ": ");
+            System.out.print("Enter a number between " + min + " and " + max + ": \n\t\t-> ");
             String input = sc.nextLine();
             try {
                 int value = Integer.parseInt(input);
@@ -30,9 +30,10 @@ public class InputValidator {
         }
     }
 
-    public double getValidPositiveDouble() {
+    public double getValidPositiveDouble(String prompt) {
+        System.out.println(prompt);
         while (true) {
-            System.out.print("Enter a positive number: ");
+            System.out.print("Enter a positive number: \n\t\t-> ");
             String input = sc.nextLine();
             try {
                 double value = Double.parseDouble(input);
@@ -48,7 +49,7 @@ public class InputValidator {
     }
 
     public String getValidString(String prompt) {
-        System.out.println(prompt);
+        System.out.print(prompt + "\n\t\t-> ");
         while (true) {
             String input = sc.nextLine().trim();
             if (!input.isEmpty()) {
@@ -75,7 +76,7 @@ public class InputValidator {
 
     public int getValidInt() {
         while (true) {
-            System.out.print("Enter an integer: ");
+            System.out.print("Enter an integer: \n\t\t-> ");
             String input = sc.nextLine();
             try {
                 return Integer.parseInt(input);
@@ -90,7 +91,7 @@ public class InputValidator {
         sdf.setLenient(false);
 
         while (true) {
-            System.out.print("Enter a date in format (" + format + "): ");
+            System.out.print("Enter a date in format (" + format + "): \n\t\t-> ");
             String input = sc.nextLine().trim();
 
             try {
@@ -98,17 +99,6 @@ public class InputValidator {
             } catch (ParseException e) {
                 System.out.println("Error: Invalid date format. Please try again.");
             }
-        }
-    }
-
-    public String getValidOption(List<String> validOptions, String prompt) {
-        System.out.println(prompt);
-        while (true) {
-            String input = sc.nextLine().trim();
-            if (validOptions.contains(input.toUpperCase())) {
-                return input.toUpperCase();
-            }
-            System.out.println("Error: Invalid input. Allowed options are: " + validOptions);
         }
     }
 }

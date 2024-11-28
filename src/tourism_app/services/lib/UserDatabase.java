@@ -1,5 +1,6 @@
 package tourism_app.services.lib;
 
+import tourism_app.tour.meal.Meal;
 import tourism_app.users.User;
 import tourism_app.users.UserType;
 
@@ -57,7 +58,7 @@ public class UserDatabase {
     }
 
     public void saveToFile() {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_PATH, false))) {
             out.writeObject(usersById);
         } catch (IOException e) {
             System.out.println("Error saving user data: " + e.getMessage());
@@ -78,7 +79,15 @@ public class UserDatabase {
     }
 
     public void listAllUsers() {
-        usersById.values().forEach(user -> System.out.println("ID: " + user.getID() + ", Name: " + user.getName() + ", Type: " + user.getUserType()));
+        int index = 1;
+        for (User user : usersById.values()) {
+            System.out.println(index + ". " + user.toString());
+            index++;
+        }
+    }
+
+    public List<User> getUsersAsList(){
+        return  new ArrayList<>(usersById.values());
     }
 
     public User getUserByName(String name) {

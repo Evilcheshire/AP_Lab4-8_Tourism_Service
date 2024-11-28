@@ -10,10 +10,13 @@ public class ViewAllToursCommand implements Command {
         this.tourDB = tourDB;
     }
 
+    @Override
     public void execute() {
         System.out.println("Available tours:");
         tourDB.listAllTours();
     }
+
+    @Override
     public String getName(){
         return "View all tours";
     }

@@ -31,11 +31,10 @@ public class UnselectTourCommand implements Command {
             System.out.println((i + 1) + ". " + userWithTours.getSelectedTours().get(i).getName());
         }
 
-        int choice = inputValidator.getValidIntInRange(1, userWithTours.getSelectedTours().size());
+        int choice = inputValidator.getValidIntInRange("Enter the number of tour to be removed",1, userWithTours.getSelectedTours().size());
         Tour tourToRemove = userWithTours.getSelectedTours().get(choice - 1);
 
         userWithTours.removeTour(tourToRemove);
-        userTourDatabase.addUserWithTours(userWithTours);
         System.out.println("Tour successfully removed: " + tourToRemove.getName());
     }
 

@@ -18,16 +18,18 @@ public class UserTourDatabase {
 
     public void addUserWithTours(UserWithTours userWithTours) {
         userTours.put(userWithTours.getUser().getID(), userWithTours);
-        saveToFile();
     }
 
     public void listAllUserTours() {
         if (userTours.isEmpty()) {
-            System.out.println("No user tours available.");
-        } else {
-            userTours.values().forEach(userTour ->
-                    System.out.println("User ID: " + userTour.getUser().getID() +
-                            ", Tours: " + userTour.getSelectedTours()));
+            System.out.println("No meals available.");
+            return;
+        }
+
+        int index = 1;
+        for (UserWithTours user : userTours.values()) {
+            System.out.println(index + ". " + user.toString());
+            index++;
         }
     }
 
@@ -42,7 +44,6 @@ public class UserTourDatabase {
     public boolean removeToursForUser(int userId) {
         if (userTours.containsKey(userId)) {
             userTours.remove(userId);
-            saveToFile();
             return true;
         }
         return false;
@@ -58,14 +59,13 @@ public class UserTourDatabase {
 
         if (removed) {
             System.out.println("Tour \"" + tourName + "\" removed from all users' selections.");
-            saveToFile();
         } else {
             System.out.println("Tour \"" + tourName + "\" not found in any user's selections.");
         }
     }
 
     public void saveToFile() {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_PATH,false))) {
             out.writeObject(userTours);
         } catch (IOException e) {
             System.out.println("Error saving data: " + e.getMessage());

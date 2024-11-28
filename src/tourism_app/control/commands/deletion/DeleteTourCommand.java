@@ -28,8 +28,7 @@ public class DeleteTourCommand implements Command {
         System.out.println("Available tours to delete:");
         dbManager.getTourDatabase().listAllTours();
 
-        System.out.println("Enter the number of the tour to delete:");
-        int choice = inputValidator.getValidIntInRange(1, tours.size());
+        int choice = inputValidator.getValidIntInRange("Enter the number of the tour to delete:",1, tours.size());
 
         Tour selectedTour = tours.get(choice - 1);
 
@@ -47,6 +46,7 @@ public class DeleteTourCommand implements Command {
         }
     }
 
+    @Override
     public String getName() {
         return "Delete a tour";
     }

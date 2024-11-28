@@ -10,11 +10,13 @@ public class ViewAllLocationsCommand implements Command {
         this.locationDB = locationDB;
     }
 
+    @Override
     public void execute() {
         System.out.println("Available locations:");
         locationDB.listAllLocations();
     }
 
+    @Override
     public String getName(){
         return "View all locations";
     }

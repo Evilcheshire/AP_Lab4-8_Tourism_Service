@@ -36,11 +36,10 @@ public class CreateLocationCommand implements Command {
 
         String country = inputValidator.getValidString("Enter the country: ");
 
-        System.out.println("Select the location type:");
         for (int i = 0; i < allowedTypes.size(); i++) {
             System.out.println((i + 1) + ". " + allowedTypes.get(i).NAME);
         }
-        int typeIndex = inputValidator.getValidIntInRange(1, allowedTypes.size());
+        int typeIndex = inputValidator.getValidIntInRange("Select the location type:",1, allowedTypes.size());
         LocationType type = allowedTypes.get(typeIndex - 1);
 
         String description = inputValidator.getValidString("Enter a description of the location: ");

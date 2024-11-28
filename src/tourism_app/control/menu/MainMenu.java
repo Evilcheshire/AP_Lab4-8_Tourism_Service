@@ -29,10 +29,9 @@ public class MainMenu {
         initialCommands.put(3, new ExitCommand(dbManager));
 
         while (currentUser == null) {
-            System.out.println("Please choose an option:");
             initialCommands.forEach((key, command) -> System.out.println(key + ". " + command.getName()));
 
-            int choice = inputValidator.getValidIntInRange(1, initialCommands.size());
+            int choice = inputValidator.getValidIntInRange("Please choose an option:", 1, initialCommands.size());
             Command selectedCommand = initialCommands.get(choice);
 
             if (selectedCommand != null) {

@@ -4,38 +4,44 @@ import tourism_app.services.utils.InputValidator;
 import tourism_app.users.User;
 import tourism_app.users.UserType;
 
+import java.util.function.Predicate;
+
 public class UserSearchService extends SearchService<User> {
-    private final InputValidator inputValidator;
 
     public UserSearchService(InputValidator inputValidator) {
-        this.inputValidator = inputValidator;
+        super(inputValidator);
         initializeSearchCriteria();
     }
 
     private void initializeSearchCriteria() {
-        addSearchCriterion("name", this::searchByName);
-        addSearchCriterion("id", this::searchByID);
-        addSearchCriterion("userType", this::searchByUserType);
+        addSearchCriterion("Name", this::searchByName);
+        addSearchCriterion("ID", this::searchByID);
+        addSearchCriterion("User Type", this::searchByUserType);
     }
 
-    private boolean searchByName(User user) {
-        String name = inputValidator.getValidString("Enter user name to search: ");
-        return user.getName().equals(name);
+    private Predicate<User> searchByName() {
+        String name = inputValidator.getValidString("Enter user name: ");
+        return user -> user.getName().equalsIgnoreCase(name);
     }
 
-    private boolean searchByID(User user) {
-        int id = inputValidator.getValidIntInRange(1, Integer.MAX_VALUE);
-        return user.getID() == id;
+    private Predicate<User> searchByID() {
+        int id = inputValidator.getValidIntInRange("Enter user ID: ", 1, Integer.MAX_VALUE);
+        return user -> user.getID() == id;
     }
 
-    private boolean searchByUserType(User user) {
-        String userTypeInput = inputValidator.getValidString("Enter user type (Admin, Manager, User): ");
+    private Predicate<User> searchByUserType() {
+        System.out.println("Available user types:");
+        for (UserType type : UserType.values()) {
+            System.out.println("- " + type);
+        }
+        String userTypeInput = inputValidator.getValidString("Select user type: ");
         try {
             UserType userType = UserType.valueOf(userTypeInput.toUpperCase());
-            return user.getUserType() == userType;
+            return user -> user.getUserType() == userType;
         } catch (IllegalArgumentException e) {
             System.out.println("Invalid user type. Try again.");
-            return searchByUserType(user);
+            return searchByUserType();
         }
     }
 }
+

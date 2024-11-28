@@ -10,10 +10,13 @@ public class ViewAllTransportCommand implements Command {
         this.transportDB = transportDB;
     }
 
+    @Override
     public void execute() {
         System.out.println("Available transports:");
         transportDB.listAllTransports();
     }
+
+    @Override
     public String getName(){
         return "View all transport";
     }

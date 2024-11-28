@@ -26,33 +26,36 @@ public class SelectTourCommand implements Command {
     public void execute() {
         TourSearchService searchService = new TourSearchService(inputValidator);
 
-        System.out.println("Select a search criterion:");
-        searchService.displayAvailableSearchFields();
-
-        int field = inputValidator.getValidIntInRange(1, searchService.getSearchFields().size());
-
         List<Tour> tours = dbManager.getTourDatabase().getTours();
-        List<Tour> searchResults = searchService.search(searchService.getSearchFields().get(field - 1), tours);
+        if (tours.isEmpty()) {
+            System.out.println("No tours available in the database.");
+            return;
+        }
 
+        List<Tour> searchResults = searchService.search(tours);
         if (searchResults.isEmpty()) {
             System.out.println("No tours found matching your criteria.");
             return;
         }
 
-        System.out.println("Available tours:");
+        System.out.println("Search results:");
         for (int i = 0; i < searchResults.size(); i++) {
-            System.out.println((i + 1) + ". " + searchResults.get(i).getName());
+            System.out.println((i + 1) + ". " + searchResults.get(i));
         }
 
-        int selectedIndex = inputValidator.getValidIntInRange(1, searchResults.size());
+        int selectedIndex = inputValidator.getValidIntInRange(
+                "Select a tour by number: ",
+                1,
+                searchResults.size()
+        );
         Tour selectedTour = searchResults.get(selectedIndex - 1);
 
-        UserWithTours userWithTours = dbManager.getUserTourDatabase().getUserTours().computeIfAbsent(
-                user.getID(), id -> new UserWithTours(user, new ArrayList<>())
-        );
+        UserWithTours userWithTours = dbManager.getUserTourDatabase()
+                .getUserTours()
+                .computeIfAbsent(user.getID(), id -> new UserWithTours(user, new ArrayList<>()));
 
         if (userWithTours.getSelectedTours().contains(selectedTour)) {
-            System.out.println("Tour already selected.");
+            System.out.println("You have already selected this tour.");
         } else {
             userWithTours.addTour(selectedTour);
             dbManager.getUserTourDatabase().addUserWithTours(userWithTours);
@@ -62,6 +65,6 @@ public class SelectTourCommand implements Command {
 
     @Override
     public String getName() {
-        return "Select tour";
+        return "Select Tour";
     }
 }

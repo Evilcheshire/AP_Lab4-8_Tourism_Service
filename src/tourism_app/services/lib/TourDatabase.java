@@ -33,13 +33,12 @@ public class TourDatabase {
         if (tours.isEmpty()) {
             System.out.println("No tours available.");
         } else {
-            tours.forEach(tour ->
-                    System.out.println("Tour: " + tour.getName() + " - " + tour.getType() + " - $" + tour.getTotalPrice()));
+            tours.forEach(tour -> System.out.println(tour.toString() + "\n"));
         }
     }
 
     public void saveToFile() {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_PATH,false))) {
             out.writeObject(tours);
         } catch (IOException e) {
             System.out.println("Error saving tours: " + e.getMessage());

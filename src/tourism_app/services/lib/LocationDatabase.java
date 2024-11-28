@@ -20,12 +20,12 @@ public class LocationDatabase {
         saveToFile();
     }
 
-    public Location getLocation(String name) {
-        return locations.get(name);
-    }
-
     public Map<String, Location> getLocations() {
         return locations;
+    }
+
+    public List<Location> getLocationsAsList() {
+        return new ArrayList<>(locations.values());
     }
 
     public void listAllLocations() {
@@ -57,7 +57,7 @@ public class LocationDatabase {
     }
 
     public void saveToFile() {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_PATH,false))) {
             out.writeObject(locations);
         } catch (IOException e) {
             System.out.println("Error saving locations: " + e.getMessage());

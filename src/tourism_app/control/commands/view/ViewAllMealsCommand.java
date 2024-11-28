@@ -10,10 +10,13 @@ public class ViewAllMealsCommand implements Command {
         this.mealDB = mealDB;
     }
 
+    @Override
     public void execute() {
         System.out.println("Available meals:");
         mealDB.listAllMeals();
     }
+
+    @Override
     public String getName(){
         return "View all meals";
     }

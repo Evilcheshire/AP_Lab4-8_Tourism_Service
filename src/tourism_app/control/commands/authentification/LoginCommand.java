@@ -5,8 +5,6 @@ import tourism_app.control.commands.Command;
 import tourism_app.services.utils.InputValidator;
 import tourism_app.users.User;
 
-import java.util.Scanner;
-
 public class LoginCommand implements Command{
     private final UserDatabase userDatabase;
     private User authenticatedUser;
@@ -17,9 +15,10 @@ public class LoginCommand implements Command{
         this.inputValidator = inputValidator;
     }
 
+    @Override
     public void execute() {
-        String username =inputValidator.getValidString("Enter username: \n\t->");
-        String password =  inputValidator.getValidString("Enter password: \n\t->");
+        String username = inputValidator.getValidString("Enter username: ");
+        String password = inputValidator.getValidString("Enter password: ");
 
         authenticatedUser = userDatabase.login(username, password);
 

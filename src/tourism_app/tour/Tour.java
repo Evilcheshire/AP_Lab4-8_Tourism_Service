@@ -110,7 +110,7 @@ public class Tour implements Serializable {
 
     public String toString() {
         return String.format("Tour: %s\nLocation: %s, %s\nStart Date: %s" +
-                        "\nEnd Date: %s\nType: %s\nMarkUp: %.2f\nTotal Price: %.2f",
+                        "\nEnd Date: %s\nType: %s\nMarkUp: %.2f(included) \nTotal Price: %.2f",
                 name, location.getName(), location.getCountry(), startDate, endDate, type, markUp, totalPrice);
     }
 }

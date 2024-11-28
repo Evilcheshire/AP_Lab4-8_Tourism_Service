@@ -7,6 +7,7 @@ import tourism_app.tour.location.LocationType;
 import tourism_app.tour.meal.Meal;
 import tourism_app.tour.transport.Transport;
 import tourism_app.tour.transport.TransportType;
+import tourism_app.users.User;
 import tourism_app.users.UserType;
 
 import java.util.Arrays;
@@ -16,14 +17,14 @@ public class Main {
         DatabaseManager dbManager = new DatabaseManager();
         dbManager.loadAllDatabases();
 
-        //dbManager.getUserDatabase().registerUser("admin1", "admin1pass", UserType.ADMIN);
+        MainMenu mainMenu = new MainMenu(dbManager);
 
-        /*
+        dbManager.getUserDatabase().registerUser("admin1", "admin1pass", UserType.ADMIN);
+
         dbManager.getTransportDatabase().addTransport(new Transport("Bus", TransportType.BUS, 10));
         dbManager.getTransportDatabase().addTransport(new Transport("Plane", TransportType.PLANE, 20));
         dbManager.getTransportDatabase().addTransport(new Transport("Train", TransportType.TRAIN, 15));
         dbManager.getTransportDatabase().addTransport(new Transport("Cruise ship", TransportType.CRUISE_SHIP, 50));
-
 
         dbManager.getLocationDatabase().addLocation(new Location(
                 "Malibu Beach Resort",
@@ -120,9 +121,7 @@ public class Main {
                 Arrays.asList("Non-Vegetarian"),
                 29.99,
                 2
-        ));*/
-
-        MainMenu mainMenu = new MainMenu(dbManager);
+        ));
 
         mainMenu.start();
 

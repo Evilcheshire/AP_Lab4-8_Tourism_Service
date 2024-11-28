@@ -19,11 +19,9 @@ public class Menu {
     }
 
     public void executeSelectedCommand() {
-        System.out.println("Select a command:");
-
         commands.forEach((key, command) -> System.out.println(key + ". " + command.getName()));
 
-        int choice = inputValidator.getValidIntInRange(0, commands.size() - 1);
+        int choice = inputValidator.getValidIntInRange("Select a command:",0, commands.size() - 1);
         Command command = commands.get(choice);
 
         if (command != null) {

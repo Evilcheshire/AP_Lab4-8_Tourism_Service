@@ -2,38 +2,38 @@ package tourism_app.services.searchService;
 
 import tourism_app.services.utils.InputValidator;
 import tourism_app.tour.location.Location;
+import tourism_app.tour.location.LocationType;
+
+import java.util.function.Predicate;
 
 public class LocationSearchService extends SearchService<Location> {
-    private final InputValidator inputValidator;
-
     public LocationSearchService(InputValidator inputValidator) {
-        this.inputValidator = inputValidator;
+        super(inputValidator);
         initializeSearchCriteria();
     }
 
     private void initializeSearchCriteria() {
-        addSearchCriterion("name", this::searchByName);
-        addSearchCriterion("country", this::searchByCountry);
-        addSearchCriterion("type", this::searchByType);
+        addSearchCriterion("Name", this::searchByName);
+        addSearchCriterion("Country", this::searchByCountry);
+        addSearchCriterion("Type", this::searchByType);
     }
 
-    private boolean searchByName(Location location) {
-        String name = inputValidator.getValidString("Enter name to search: ");
-        return location.getName().equals(name);
+    private Predicate<Location> searchByName() {
+        String name = inputValidator.getValidString("Enter location name: ");
+        return location -> location.getName().equalsIgnoreCase(name);
     }
 
-    private boolean searchByCountry(Location location) {
-        String country = inputValidator.getValidString("Enter country to search: ");
-        return location.getCountry().equalsIgnoreCase(country);
+    private Predicate<Location> searchByCountry() {
+        String country = inputValidator.getValidString("Enter country: ");
+        return location -> location.getCountry().equalsIgnoreCase(country);
     }
 
-    private boolean searchByType(Location location) {
-        String type = inputValidator.getValidString("Enter location type (e.g., BEACH, MOUNTAIN): ");
-        try {
-            return location.getType().toString().equalsIgnoreCase(type);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Invalid type entered.");
-            return false;
+    private Predicate<Location> searchByType() {
+        System.out.println("Available location types:");
+        for (LocationType type : LocationType.values()) {
+            System.out.println("- " + type.NAME);
         }
+        String type = inputValidator.getValidString("Select location type: ");
+        return location -> location.getType().NAME.equalsIgnoreCase(type);
     }
 }

@@ -30,17 +30,14 @@ public class DeleteLocationCommand implements Command {
         System.out.println("Available locations to delete:");
         databaseManager.getLocationDatabase().listAllLocations();
 
-        System.out.println("Enter the number of the location to delete:");
-        int choice = inputValidator.getValidIntInRange(1, locations.size());
+        int choice = inputValidator.getValidIntInRange("Enter the number of the location to delete:",1, locations.size());
 
         String selectedLocationName = (String) locations.keySet().toArray()[choice - 1];
         Location selectedLocation = locations.get(selectedLocationName);
 
-        // Видалення локації
         if (databaseManager.getLocationDatabase().removeLocation(selectedLocationName)) {
             System.out.println("Location \"" + selectedLocation.getName() + "\" has been deleted.");
 
-            // Видалення турів, які залежали від локації
             databaseManager.getTourDatabase().getTours().stream()
                     .filter(tour -> selectedLocation.equals(tour.getLocation()))
                     .collect(Collectors.toList())

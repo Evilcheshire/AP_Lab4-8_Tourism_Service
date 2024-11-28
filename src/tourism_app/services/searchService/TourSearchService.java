@@ -2,14 +2,13 @@ package tourism_app.services.searchService;
 
 import tourism_app.services.utils.InputValidator;
 import tourism_app.tour.Tour;
-import tourism_app.tour.TourType;
 
 import java.util.Date;
-public class TourSearchService extends SearchService<Tour> {
-    private final InputValidator inputValidator;
+import java.util.function.Predicate;
 
+public class TourSearchService extends SearchService<Tour> {
     public TourSearchService(InputValidator inputValidator) {
-        this.inputValidator = inputValidator;
+        super(inputValidator);
         initializeSearchCriteria();
     }
 
@@ -20,55 +19,44 @@ public class TourSearchService extends SearchService<Tour> {
         addSearchCriterion("Date Range", this::searchByDateRange);
         addSearchCriterion("Price", this::searchByPrice);
         addSearchCriterion("Meal Type", this::searchByMealType);
+        addSearchCriterion("Transport Type", this::searchByTransportType);
     }
 
-    private boolean searchByName(Tour tour) {
-        String name = inputValidator.getValidString("Enter the tour name to search: ");
-        return tour.getName().equals(name);
+    private Predicate<Tour> searchByName() {
+        String name = inputValidator.getValidString("Enter tour name: ");
+        return tour -> tour.getName().equalsIgnoreCase(name);
     }
 
-    private boolean searchByLocation(Tour tour) {
-        String location = inputValidator.getValidString("Enter the location name to search: ");
-        return tour.getLocation().getName().equals(location);
+    private Predicate<Tour> searchByLocation() {
+        String locationName = inputValidator.getValidString("Enter location name: ");
+        return tour -> tour.getLocation().getName().equalsIgnoreCase(locationName);
     }
 
-    private boolean searchByType(Tour tour) {
-        System.out.println("Available tour types:");
-        TourType[] types = TourType.values();
-        for (int i = 0; i < types.length; i++) {
-            System.out.printf("%d. %s (%s)%n", i + 1, types[i].NAME, types[i].name());
-        }
-        System.out.println("Choose the number corresponding to the tour type: ");
-        int choice = inputValidator.getValidIntInRange(1, types.length);
-        TourType selectedType = types[choice - 1];
-        return tour.getType() == selectedType;
+    private Predicate<Tour> searchByType() {
+        String type = inputValidator.getValidString("Enter tour type: ");
+        return tour -> tour.getType().NAME.equalsIgnoreCase(type);
     }
 
-    private boolean searchByDateRange(Tour tour) {
-        Date minDate = inputValidator.getValidDate("Enter the start date (yyyy-MM-dd): ");
-        Date maxDate = inputValidator.getValidDate("Enter the end date (yyyy-MM-dd): ");
-
-        while (maxDate.before(minDate)) {
-            System.out.println("End date cannot be earlier than start date. Please try again.");
-            minDate = inputValidator.getValidDate("Enter the start date (yyyy-MM-dd): ");
-            maxDate = inputValidator.getValidDate("Enter the end date (yyyy-MM-dd): ");
-        }
-        return tour.getStartDate().compareTo(minDate) >= 0 && tour.getStartDate().compareTo(maxDate) <= 0;
+    private Predicate<Tour> searchByDateRange() {
+        Date startDate = inputValidator.getValidDate("Enter start date (yyyy-MM-dd): ");
+        Date endDate = inputValidator.getValidDate("Enter end date (yyyy-MM-dd): ");
+        return tour -> !tour.getStartDate().before(startDate) && !tour.getEndDate().after(endDate);
     }
 
-    private boolean searchByPrice(Tour tour) {
-        double minPrice = inputValidator.getValidPositiveDouble();
-        double maxPrice = inputValidator.getValidPositiveDouble();
-
-        if (maxPrice < minPrice) {
-            System.out.println("Maximum price cannot be less than minimum price. Please try again.");
-            return searchByPrice(tour);
-        }
-        return tour.getTotalPrice() >= minPrice && tour.getTotalPrice() <= maxPrice;
+    private Predicate<Tour> searchByPrice() {
+        double maxPrice = inputValidator.getValidPositiveDouble("Enter maximum price: ");
+        return tour -> tour.getTotalPrice() <= maxPrice;
     }
 
-    private boolean searchByMealType(Tour tour) {
-        String type = inputValidator.getValidString("Enter meal type (e.g., VEGETARIAN, NON_VEGETARIAN, VEGAN): ");
-        return tour.getMeal().getTypes().stream().anyMatch(t -> t.equalsIgnoreCase(type));
+    private Predicate<Tour> searchByMealType() {
+        System.out.println("Available meal types: Vegetarian, Non-Vegetarian, Vegan");
+        String mealType = inputValidator.getValidString("Select meal type: ");
+        return tour -> tour.getMeal().getTypes().stream().anyMatch(type -> type.equalsIgnoreCase(mealType));
+    }
+
+    private Predicate<Tour> searchByTransportType() {
+        System.out.println("Available transport types: Bus, Train, Plane");
+        String transportType = inputValidator.getValidString("Select transport type: ");
+        return tour -> tour.getTransport().getType().NAME.equalsIgnoreCase(transportType);
     }
 }

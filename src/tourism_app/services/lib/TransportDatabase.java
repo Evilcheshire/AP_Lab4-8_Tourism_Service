@@ -1,5 +1,6 @@
 package tourism_app.services.lib;
 
+import tourism_app.tour.meal.Meal;
 import tourism_app.tour.transport.Transport;
 
 import java.io.*;
@@ -29,9 +30,13 @@ public class TransportDatabase {
     public void listAllTransports() {
         if (transports.isEmpty()) {
             System.out.println("No transports available.");
-        } else {
-            transports.values().forEach(transport ->
-                    System.out.println("Transport: " + transport.getName() + ", Cost per day: " + transport.getCost()));
+            return;
+        }
+
+        int index = 1;
+        for (Transport transport : transports.values()) {
+            System.out.println(index + ". " + transport.toString());
+            index++;
         }
     }
 
@@ -40,7 +45,7 @@ public class TransportDatabase {
     }
 
     public void saveToFile() {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_PATH,false))) {
             out.writeObject(transports);
         } catch (IOException e) {
             System.out.println("Error saving transports: " + e.getMessage());

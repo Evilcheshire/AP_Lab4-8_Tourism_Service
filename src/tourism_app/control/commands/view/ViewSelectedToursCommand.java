@@ -10,10 +10,13 @@ public class ViewSelectedToursCommand implements Command {
         this.userTourDB = userTourDB;
     }
 
+    @Override
     public void execute() {
         System.out.println("Customers and their tours:");
         userTourDB.listAllUserTours();
     }
+
+    @Override
     public String getName(){
         return "View selected tours";
     }

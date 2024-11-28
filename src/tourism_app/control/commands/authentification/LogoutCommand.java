@@ -10,11 +10,13 @@ public class LogoutCommand implements Command {
         this.userDatabase = userDatabase;
     }
 
+    @Override
     public void execute() {
         System.out.println("Logging out...");
         userDatabase.saveToFile();
     }
 
+    @Override
     public String getName() {
         return "Log out";
     }

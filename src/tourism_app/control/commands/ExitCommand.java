@@ -10,14 +10,14 @@ public class ExitCommand implements Command{
         this.dbManager = dbManager;
     }
 
-    public User getAuthenticatedUser() { return null; }
-
+    @Override
     public void execute() {
         dbManager.saveAllDatabases();
         System.out.println("Exiting the application. Goodbye!");
         System.exit(0);
     }
 
+    @Override
     public String getName() {
         return "Exit";
     }
