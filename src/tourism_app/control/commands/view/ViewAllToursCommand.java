@@ -13,7 +13,7 @@ public class ViewAllToursCommand implements Command {
     @Override
     public void execute() {
         System.out.println("Available tours:");
-        tourDB.listAllTours();
+        tourDB.listAllItems();
     }
 
     @Override

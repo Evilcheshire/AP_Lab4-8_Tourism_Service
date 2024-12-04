@@ -13,7 +13,7 @@ public class ViewAllLocationsCommand implements Command {
     @Override
     public void execute() {
         System.out.println("Available locations:");
-        locationDB.listAllLocations();
+        locationDB.listAllItems();
     }
 
     @Override

@@ -26,7 +26,7 @@ public class DeleteUserCommand implements Command {
         }
 
         System.out.println("Available users to delete:");
-        dbManager.getUserDatabase().listAllUsers();
+        dbManager.getUserDatabase().listAllItems();
 
         System.out.println("Enter the ID of the user to delete:");
         int userId = inputValidator.getValidInt();
@@ -39,21 +39,25 @@ public class DeleteUserCommand implements Command {
         }
 
         if (userToDelete.isCustomer()) {
-            if (dbManager.getUserTourDatabase().removeToursForUser(userId)) {
+            boolean toursRemoved = dbManager.getUserTourDatabase().removeToursForUser(userId, () -> {
                 System.out.println("All selected tours for user \"" + userToDelete.getName() + "\" have been removed.");
-            } else {
+            });
+
+            if (!toursRemoved) {
                 System.out.println("No selected tours found for user \"" + userToDelete.getName() + "\".");
             }
         }
 
-        if (dbManager.getUserDatabase().removeUser(userToDelete.getID())) {
+        boolean userRemoved = dbManager.getUserDatabase().removeUserById(userToDelete.getID(), () -> {
             System.out.println("User \"" + userToDelete.getName() + "\" has been deleted.");
-        } else {
+        });
+
+        if (!userRemoved) {
             System.out.println("Failed to delete user \"" + userToDelete.getName() + "\".");
         }
     }
 
-    @Override
+        @Override
     public String getName() {
         return "Delete a user";
     }

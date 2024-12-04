@@ -35,7 +35,7 @@ public class UserWithTours {
             toursInfo.append("No tours selected.");
         } else {
             for (Tour tour : selectedTours) {
-                toursInfo.append("\n- ").append(tour.getName());
+                toursInfo.append("\n- ").append(tour.toString());
             }
         }
 

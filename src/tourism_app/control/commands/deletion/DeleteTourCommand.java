@@ -18,7 +18,7 @@ public class DeleteTourCommand implements Command {
 
     @Override
     public void execute() {
-        List<Tour> tours = dbManager.getTourDatabase().getTours();
+        List<Tour> tours = dbManager.getTourDatabase().getAllItemsAsList();
 
         if (tours.isEmpty()) {
             System.out.println("No tours available to delete.");
@@ -26,14 +26,13 @@ public class DeleteTourCommand implements Command {
         }
 
         System.out.println("Available tours to delete:");
-        dbManager.getTourDatabase().listAllTours();
+        dbManager.getTourDatabase().listAllItems();
 
-        int choice = inputValidator.getValidIntInRange("Enter the number of the tour to delete:",1, tours.size());
-
+        int choice = inputValidator.getValidIntInRange("Enter the number of the tour to delete:", 1, tours.size());
         Tour selectedTour = tours.get(choice - 1);
 
-        boolean isRemoved = dbManager.getTourDatabase().removeTour(selectedTour.getName(), () -> {
-            dbManager.getUserTourDatabase().getUserTours().values().forEach(userWithTours -> {
+        boolean isRemoved = dbManager.getTourDatabase().removeItem(selectedTour.getName(), () -> {
+            dbManager.getUserTourDatabase().getAllItemsAsMap().values().forEach(userWithTours -> {
                 userWithTours.getSelectedTours().removeIf(tour -> tour.getName().equals(selectedTour.getName()));
             });
             dbManager.getUserTourDatabase().saveToFile();

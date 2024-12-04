@@ -13,7 +13,7 @@ public class ViewAllMealsCommand implements Command {
     @Override
     public void execute() {
         System.out.println("Available meals:");
-        mealDB.listAllMeals();
+        mealDB.listAllItems();
     }
 
     @Override

@@ -20,7 +20,7 @@ public class DeleteTransportCommand implements Command {
 
     @Override
     public void execute() {
-        Map<String, Transport> transports = databaseManager.getTransportDatabase().getTransports();
+        Map<String, Transport> transports = databaseManager.getTransportDatabase().getAllItemsAsMap();
 
         if (transports.isEmpty()) {
             System.out.println("No transports available to delete.");
@@ -28,21 +28,20 @@ public class DeleteTransportCommand implements Command {
         }
 
         System.out.println("Available transports to delete:");
-        databaseManager.getTransportDatabase().listAllTransports();
+        databaseManager.getTransportDatabase().listAllItems();
 
         int choice = inputValidator.getValidIntInRange("Enter the number of the transport to delete:",1, transports.size());
 
         String selectedTransportName = (String) transports.keySet().toArray()[choice - 1];
         Transport selectedTransport = transports.get(selectedTransportName);
 
-        if (databaseManager.getTransportDatabase().removeTransport(selectedTransportName)) {
-            System.out.println("Transport \"" + selectedTransport.getName() + "\" has been deleted.");
+        if (databaseManager.getTransportDatabase().removeItem(selectedTransportName,
+                () -> System.out.println("Transport \"" + selectedTransport.getName() + "\" has been deleted."))) {
 
-            databaseManager.getTourDatabase().getTours().stream()
+            databaseManager.getTourDatabase().getAllItemsAsList().stream()
                     .filter(tour -> selectedTransport.equals(tour.getTransport()))
-                    .collect(Collectors.toList())
                     .forEach(tour -> {
-                        databaseManager.getTourDatabase().removeTour(tour.getName(), () ->
+                        databaseManager.getTourDatabase().removeItem(tour.getName(), () ->
                                 System.out.println("Tour \"" + tour.getName() + "\" removed due to missing transport."));
                         databaseManager.getUserTourDatabase().removeTourFromUsers(tour.getName());
                     });

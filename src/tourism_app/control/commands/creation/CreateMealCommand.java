@@ -22,7 +22,7 @@ public class CreateMealCommand implements Command {
 
         String name = inputValidator.getValidString("Enter the meal name: ");
 
-        if (mealDB.getMeals().containsKey(name)) {
+        if (mealDB.getAllItemsAsMap().containsKey(name)) {
             System.out.println("A meal with this name already exists.");
             return;
         }
@@ -44,7 +44,7 @@ public class CreateMealCommand implements Command {
         int mealsPerDay = inputValidator.getValidIntInRange("Enter the number of meals per day (max - 6): ",1, 6);
 
         Meal newMeal = new Meal(name, types, costPerDay, mealsPerDay);
-        mealDB.addMeal(newMeal);
+        mealDB.addItem(name, newMeal);
 
         System.out.println("Meal \"" + name + "\" has been successfully created!");
         System.out.println(newMeal);

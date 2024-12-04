@@ -19,7 +19,7 @@ public class SearchForTourCommand implements Command {
 
     @Override
     public void execute() {
-        List<Tour> tours = tourDatabase.getTours();
+        List<Tour> tours = tourDatabase.getAllItemsAsList();
         List<Tour> results = searchService.search(tours);
 
         if (results.isEmpty()) {

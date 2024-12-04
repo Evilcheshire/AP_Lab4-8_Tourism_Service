@@ -20,7 +20,7 @@ public class UnselectTourCommand implements Command {
 
     @Override
     public void execute() {
-        UserWithTours userWithTours = userTourDatabase.getUserTours().get(user.getID());
+        UserWithTours userWithTours = userTourDatabase.getAllItemsAsMap().get(user.getName());
         if (userWithTours == null || userWithTours.getSelectedTours().isEmpty()) {
             System.out.println("You have no selected tours to remove.");
             return;

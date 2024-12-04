@@ -29,7 +29,7 @@ public class CreateLocationCommand implements Command {
 
         String name = inputValidator.getValidString("Enter the location name: ");
 
-        if (locationDB.getLocations().containsKey(name)) {
+        if (locationDB.getAllItemsAsMap().containsKey(name)) {
             System.out.println("A location with this name already exists.");
             return;
         }
@@ -46,7 +46,7 @@ public class CreateLocationCommand implements Command {
 
         Location newLocation = new Location(name, country, type, description);
 
-        locationDB.addLocation(newLocation);
+        locationDB.addItem(name, newLocation);
 
         System.out.println("Location \"" + name + "\" has been successfully created!");
         System.out.println(newLocation);

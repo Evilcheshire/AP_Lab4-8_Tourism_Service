@@ -19,7 +19,7 @@ public class SearchForTransportCommand implements Command {
 
     @Override
     public void execute() {
-        List<Transport> transports = transportDatabase.getAllTransports();
+        List<Transport> transports = transportDatabase.getAllItemsAsList();
         List<Transport> results = searchService.search(transports);
 
         if (results.isEmpty()) {

@@ -13,7 +13,7 @@ public class ViewAllUsersCommand implements Command {
     @Override
     public void execute() {
         System.out.println("Registered users:");
-        userDB.listAllUsers();
+        userDB.listAllItems();
     }
 
     @Override

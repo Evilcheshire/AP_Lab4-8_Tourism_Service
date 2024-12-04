@@ -19,7 +19,7 @@ public class SearchForLocationCommand implements Command {
 
     @Override
     public void execute() {
-        List<Location> locations = locationDatabase.getLocationsAsList();
+        List<Location> locations = locationDatabase.getAllItemsAsList();
         List<Location> results = searchService.search(locations);
 
         if (results.isEmpty()) {

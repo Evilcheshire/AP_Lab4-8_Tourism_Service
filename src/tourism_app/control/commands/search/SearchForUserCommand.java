@@ -19,7 +19,7 @@ public class SearchForUserCommand implements Command {
 
     @Override
     public void execute() {
-        List<User> users = userDatabase.getUsersAsList();
+        List<User> users = userDatabase.getAllItemsAsList();
         List<User> results = searchService.search(users);
 
         if (results.isEmpty()) {

@@ -13,7 +13,7 @@ public class ViewAllTransportCommand implements Command {
     @Override
     public void execute() {
         System.out.println("Available transports:");
-        transportDB.listAllTransports();
+        transportDB.listAllItems();
     }
 
     @Override

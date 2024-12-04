@@ -6,8 +6,7 @@ import tourism_app.tour.Tour;
 import tourism_app.tour.meal.Meal;
 import tourism_app.services.utils.InputValidator;
 
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.List;
 
 public class DeleteMealCommand implements Command {
     private final DatabaseManager databaseManager;
@@ -20,7 +19,7 @@ public class DeleteMealCommand implements Command {
 
     @Override
     public void execute() {
-        Map<String, Meal> meals = databaseManager.getMealDatabase().getMeals();
+        List<Meal> meals = databaseManager.getMealDatabase().getAllItemsAsList();
 
         if (meals.isEmpty()) {
             System.out.println("No meals available to delete.");
@@ -28,26 +27,23 @@ public class DeleteMealCommand implements Command {
         }
 
         System.out.println("Available meals to delete:");
-        databaseManager.getMealDatabase().listAllMeals();
+        databaseManager.getMealDatabase().listAllItems();
 
-        int choice = inputValidator.getValidIntInRange("Enter the number of the meal to delete:",1, meals.size());
+        int choice = inputValidator.getValidIntInRange("Enter the number of the meal to delete:", 1, meals.size());
+        Meal selectedMeal = meals.get(choice - 1);
 
-        String selectedMealName = (String) meals.keySet().toArray()[choice - 1];
-        Meal selectedMeal = meals.get(selectedMealName);
-
-        if (databaseManager.getMealDatabase().removeMeal(selectedMealName)) {
-            System.out.println("Meal \"" + selectedMeal.getName() + "\" has been deleted.");
-
-            databaseManager.getTourDatabase().getTours().stream()
+        boolean isRemoved = databaseManager.getMealDatabase().removeItem(selectedMeal.getName(), () -> {
+            databaseManager.getTourDatabase().getAllItemsAsList().stream()
                     .filter(tour -> selectedMeal.equals(tour.getMeal()))
-                    .collect(Collectors.toList())
                     .forEach(tour -> {
-                        databaseManager.getTourDatabase().removeTour(tour.getName(), () ->
+                        databaseManager.getTourDatabase().removeItem(tour.getName(), () ->
                                 System.out.println("Tour \"" + tour.getName() + "\" removed due to missing meal."));
                         databaseManager.getUserTourDatabase().removeTourFromUsers(tour.getName());
                     });
+        });
 
-            databaseManager.saveAllDatabases();
+        if (isRemoved) {
+            System.out.println("Meal \"" + selectedMeal.getName() + "\" has been deleted.");
         } else {
             System.out.println("Failed to delete meal \"" + selectedMeal.getName() + "\".");
         }

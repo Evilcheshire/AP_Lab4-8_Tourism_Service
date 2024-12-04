@@ -3,47 +3,27 @@ package tourism_app.services.lib;
 import tourism_app.tour.Tour;
 import tourism_app.users.UserWithTours;
 
-import java.io.*;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-public class UserTourDatabase {
-    private static final String FILE_PATH = "userWithTours.ser";
-    private Map<Integer, UserWithTours> userTours = new LinkedHashMap<>();
+public class UserTourDatabase extends AbstractDatabase<UserWithTours> {
+    private final Map<Integer, UserWithTours> userToursById = new LinkedHashMap<>();
 
     public UserTourDatabase() {
-        loadFromFile();
+        super("userWithTours.ser");
+        syncIndexes();
     }
 
     public void addUserWithTours(UserWithTours userWithTours) {
-        userTours.put(userWithTours.getUser().getID(), userWithTours);
+        addItem(String.valueOf(userWithTours.getUser().getID()), userWithTours);
     }
 
-    public void listAllUserTours() {
-        if (userTours.isEmpty()) {
-            System.out.println("No meals available.");
-            return;
-        }
-
-        int index = 1;
-        for (UserWithTours user : userTours.values()) {
-            System.out.println(index + ". " + user.toString());
-            index++;
-        }
-    }
-
-    public Tour getTourByName(String tourName) {
-        return userTours.values().stream()
-                .flatMap(userWithTours -> userWithTours.getSelectedTours().stream())
-                .filter(tour -> tour.getName().equalsIgnoreCase(tourName))
-                .findFirst()
-                .orElse(null);
-    }
-
-    public boolean removeToursForUser(int userId) {
-        if (userTours.containsKey(userId)) {
-            userTours.remove(userId);
+    public boolean removeToursForUser(int userId, Runnable onSuccess) {
+        UserWithTours userWithTours = userToursById.remove(userId);
+        if (userWithTours != null) {
+            removeItem(String.valueOf(userId), onSuccess);
             return true;
         }
         return false;
@@ -51,7 +31,7 @@ public class UserTourDatabase {
 
     public void removeTourFromUsers(String tourName) {
         boolean removed = false;
-        for (UserWithTours userWithTours : userTours.values()) {
+        for (UserWithTours userWithTours : userToursById.values()) {
             if (userWithTours.getSelectedTours().removeIf(tour -> tour.getName().equalsIgnoreCase(tourName))) {
                 removed = true;
             }
@@ -62,29 +42,51 @@ public class UserTourDatabase {
         } else {
             System.out.println("Tour \"" + tourName + "\" not found in any user's selections.");
         }
+        saveToFile();
     }
 
-    public void saveToFile() {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_PATH,false))) {
-            out.writeObject(userTours);
-        } catch (IOException e) {
-            System.out.println("Error saving data: " + e.getMessage());
+    @Override
+    public void addItem(String key, UserWithTours userWithTours) {
+        super.addItem(key, userWithTours);
+        userToursById.put(userWithTours.getUser().getID(), userWithTours);
+    }
+
+    public boolean removeItem(String key, Runnable onSuccess) {
+        UserWithTours userWithTours = getItem(key);
+        if (userWithTours != null) {
+            super.removeItem(key, onSuccess);
+            userToursById.remove(userWithTours.getUser().getID());
+            return true;
         }
+        return false;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public void loadFromFile() {
-        File file = new File(FILE_PATH);
-        if (!file.exists()) return;
+        super.loadFromFile();
+        syncIndexes();
+    }
 
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
-            userTours = (Map<Integer, UserWithTours>) in.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Error loading data: " + e.getMessage());
+    private void syncIndexes() {
+        for (UserWithTours userWithTours : data.values()) {
+            userToursById.put(userWithTours.getUser().getID(), userWithTours);
         }
     }
 
-    public Map<Integer, UserWithTours> getUserTours() {
-        return new HashMap<>(userTours);
+    public void listAllUserTours() {
+        if (data.isEmpty()) {
+            System.out.println("No user tours available.");
+        } else {
+            int index = 1;
+            for (UserWithTours userWithTours : data.values()) {
+                System.out.println(index + ". " + userWithTours);
+                index++;
+            }
+        }
+    }
+
+    public Map<Integer, UserWithTours> getUserToursById() {
+        return new LinkedHashMap<>(userToursById);
     }
 }

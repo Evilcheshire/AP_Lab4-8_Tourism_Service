@@ -19,7 +19,7 @@ public class SearchForMealCommand implements Command {
 
     @Override
     public void execute() {
-        List<Meal> meals = mealDatabase.getMealsAsList();
+        List<Meal> meals = mealDatabase.getAllItemsAsList();
         List<Meal> results = searchService.search(meals);
 
         if (results.isEmpty()) {

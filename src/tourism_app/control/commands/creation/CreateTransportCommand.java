@@ -20,7 +20,7 @@ public class CreateTransportCommand implements Command {
 
         String name = inputValidator.getValidString("Enter the transport name: ");
 
-        if (transportDB.getTransports().containsKey(name)) {
+        if (transportDB.getAllItemsAsMap().containsKey(name)) {
             System.out.println("A transport with this name already exists.");
             return;
         }
@@ -38,7 +38,7 @@ public class CreateTransportCommand implements Command {
 
         Transport newTransport = new Transport(name, type, costPerDay);
 
-        transportDB.addTransport(newTransport);
+        transportDB.addItem(name, newTransport);
 
         System.out.println("Transport \"" + name + "\" has been successfully created!");
         System.out.println(newTransport);

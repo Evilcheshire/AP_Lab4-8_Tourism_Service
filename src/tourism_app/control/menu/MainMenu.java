@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 public class MainMenu {
     private final DatabaseManager dbManager;
-    private final InputValidator inputValidator = new InputValidator(new Scanner(System.in));
+    private final InputValidator inputValidator = new InputValidator();
     private User currentUser;
 
     public MainMenu(DatabaseManager dbManager) {

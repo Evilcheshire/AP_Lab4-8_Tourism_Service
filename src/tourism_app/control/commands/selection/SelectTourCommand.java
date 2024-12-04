@@ -26,7 +26,7 @@ public class SelectTourCommand implements Command {
     public void execute() {
         TourSearchService searchService = new TourSearchService(inputValidator);
 
-        List<Tour> tours = dbManager.getTourDatabase().getTours();
+        List<Tour> tours = dbManager.getTourDatabase().getAllItemsAsList();
         if (tours.isEmpty()) {
             System.out.println("No tours available in the database.");
             return;
@@ -51,8 +51,12 @@ public class SelectTourCommand implements Command {
         Tour selectedTour = searchResults.get(selectedIndex - 1);
 
         UserWithTours userWithTours = dbManager.getUserTourDatabase()
-                .getUserTours()
-                .computeIfAbsent(user.getID(), id -> new UserWithTours(user, new ArrayList<>()));
+                .getItem(String.valueOf(user.getID()));
+
+        if (userWithTours == null) {
+            userWithTours = new UserWithTours(user, new ArrayList<>());
+            dbManager.getUserTourDatabase().addItem(String.valueOf(user.getID()), userWithTours);
+        }
 
         if (userWithTours.getSelectedTours().contains(selectedTour)) {
             System.out.println("You have already selected this tour.");

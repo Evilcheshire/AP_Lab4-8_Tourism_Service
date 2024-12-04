@@ -6,8 +6,7 @@ import tourism_app.tour.Tour;
 import tourism_app.tour.location.Location;
 import tourism_app.services.utils.InputValidator;
 
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.List;
 
 public class DeleteLocationCommand implements Command {
     private final DatabaseManager databaseManager;
@@ -20,7 +19,7 @@ public class DeleteLocationCommand implements Command {
 
     @Override
     public void execute() {
-        Map<String, Location> locations = databaseManager.getLocationDatabase().getLocations();
+        List<Location> locations = databaseManager.getLocationDatabase().getAllItemsAsList();
 
         if (locations.isEmpty()) {
             System.out.println("No locations available to delete.");
@@ -28,26 +27,23 @@ public class DeleteLocationCommand implements Command {
         }
 
         System.out.println("Available locations to delete:");
-        databaseManager.getLocationDatabase().listAllLocations();
+        databaseManager.getLocationDatabase().listAllItems();
 
-        int choice = inputValidator.getValidIntInRange("Enter the number of the location to delete:",1, locations.size());
+        int choice = inputValidator.getValidIntInRange("Enter the number of the location to delete:", 1, locations.size());
+        Location selectedLocation = locations.get(choice - 1);
 
-        String selectedLocationName = (String) locations.keySet().toArray()[choice - 1];
-        Location selectedLocation = locations.get(selectedLocationName);
-
-        if (databaseManager.getLocationDatabase().removeLocation(selectedLocationName)) {
-            System.out.println("Location \"" + selectedLocation.getName() + "\" has been deleted.");
-
-            databaseManager.getTourDatabase().getTours().stream()
+        boolean isRemoved = databaseManager.getLocationDatabase().removeItem(selectedLocation.getName(), () -> {
+            databaseManager.getTourDatabase().getAllItemsAsList().stream()
                     .filter(tour -> selectedLocation.equals(tour.getLocation()))
-                    .collect(Collectors.toList())
                     .forEach(tour -> {
-                        databaseManager.getTourDatabase().removeTour(tour.getName(), () ->
+                        databaseManager.getTourDatabase().removeItem(tour.getName(), () ->
                                 System.out.println("Tour \"" + tour.getName() + "\" removed due to missing location."));
                         databaseManager.getUserTourDatabase().removeTourFromUsers(tour.getName());
                     });
+        });
 
-            databaseManager.saveAllDatabases();
+        if (isRemoved) {
+            System.out.println("Location \"" + selectedLocation.getName() + "\" has been deleted.");
         } else {
             System.out.println("Failed to delete location \"" + selectedLocation.getName() + "\".");
         }

@@ -55,7 +55,7 @@ public class CreateTourCommand implements Command {
         double markUp = inputValidator.getValidPositiveDouble("Enter markup percentage: ");
 
         Tour newTour = new Tour(name, location, meal, transport, startDate, endDate, type, markUp);
-        dbManager.getTourDatabase().addTour(newTour);
+        dbManager.getTourDatabase().addItem(name, newTour);
 
         System.out.println("Tour created successfully!");
     }
@@ -74,42 +74,42 @@ public class CreateTourCommand implements Command {
 
         if (locationChoice == 0) {
             new CreateLocationCommand(dbManager.getLocationDatabase(), inputValidator, allowedLocationTypes).execute();
-            return dbManager.getLocationDatabase().getLocations()
-                    .get(dbManager.getLocationDatabase().getLocations().size() - 1);
+            return dbManager.getLocationDatabase().getAllItemsAsList()
+                    .get(dbManager.getLocationDatabase().getAllItemsAsList().size() - 1);
         } else {
             return filteredLocations.get(locationChoice - 1);
         }
     }
 
     private Meal selectMeal() {
-        dbManager.getMealDatabase().listAllMeals();
+        dbManager.getMealDatabase().listAllItems();
         System.out.println("0 - Create a new meal");
 
         int mealChoice = inputValidator.getValidIntInRange("Choose a meal:",0,
-                dbManager.getMealDatabase().getMeals().size());
+                dbManager.getMealDatabase().getAllItemsAsMap().size());
 
         if (mealChoice == 0) {
             new CreateMealCommand(dbManager.getMealDatabase(), inputValidator).execute();
-            return dbManager.getMealDatabase().getMeals().get
-                    (dbManager.getMealDatabase().getMeals().size() - 1);
+            return dbManager.getMealDatabase().getAllItemsAsMap().get
+                    (dbManager.getMealDatabase().getAllItemsAsMap().size() - 1);
         } else {
-            return (Meal) dbManager.getMealDatabase().getMeals().values().toArray()[mealChoice - 1];
+            return (Meal) dbManager.getMealDatabase().getAllItemsAsMap().values().toArray()[mealChoice - 1];
         }
     }
 
     private Transport selectTransport() {
-        dbManager.getTransportDatabase().listAllTransports();
+        dbManager.getTransportDatabase().listAllItems();
         System.out.println("0 - Create a new transport");
 
         int transportChoice = inputValidator.getValidIntInRange("Choose a transport:", 0,
-                dbManager.getTransportDatabase().getTransports().size());
+                dbManager.getTransportDatabase().getAllItemsAsMap().size());
 
         if (transportChoice == 0) {
             new CreateTransportCommand(dbManager.getTransportDatabase(), inputValidator).execute();
-            return dbManager.getTransportDatabase().getTransports().get
-                    (dbManager.getTransportDatabase().getTransports().size() - 1);
+            return dbManager.getTransportDatabase().getAllItemsAsMap().get
+                    (dbManager.getTransportDatabase().getAllItemsAsMap().size() - 1);
         } else {
-            return (Transport) dbManager.getTransportDatabase().getTransports().values().toArray()[transportChoice - 1];
+            return (Transport) dbManager.getTransportDatabase().getAllItemsAsMap().values().toArray()[transportChoice - 1];
         }
     }
 

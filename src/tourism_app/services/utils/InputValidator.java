@@ -6,10 +6,10 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class InputValidator {
-    private final Scanner sc;
+    private Scanner sc;
 
-    public InputValidator(Scanner sc) {
-        this.sc = sc;
+    public InputValidator() {
+        this.sc = new Scanner(System.in);
     }
 
     public int getValidIntInRange(String prompt, int min, int max) {
